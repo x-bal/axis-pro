@@ -78,7 +78,7 @@
                                     <td>{{ $caseList->adjuster->kode_adjuster }} ({{ $caseList->adjuster->nama_lengkap }})</td>
                                     <td>DOL</td>
                                     <td>:</td>
-                                    <td>{{ $caseList->dol }}</td>
+                                    <td>{{ Carbon\Carbon::parse($caseList->dol)->format('d-M-Y') }}</td>
                                 </tr>
                                 <tr>
                                     <td>INSURANCE</td>
@@ -98,7 +98,7 @@
                                     <td><span class="bg-secondary p-2 text-light">{{ $caseList->broker->nama_broker }}</span> </td>
                                     <td>CAUSE OF LOSS</td>
                                     <td>:</td>
-                                    <td>{{ $caseList->incident->type_incident }}</td>
+                                    <td>{{ $caseList->incident->description }}</td>
                                 </tr>
                                 <tr>
                                     <td>TYPE OF BUSINESS</td>
@@ -216,7 +216,7 @@
                             <tbody>
                                 <tr>
                                     <td width="3%">No</td>
-                                    <td width="15%">Account name</td>
+                                    <td width="15%">Name</td>
                                     <td width="9%">Category</td>
 
                                     <td width="10%">Date</td>
@@ -339,7 +339,13 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">
+                                            @error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-claim"><i class="fas fa-plus"></i></button></td>
                                     </tr>
@@ -390,7 +396,12 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">@error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-1"><i class="fas fa-plus"></i></button></td>
                                     </tr>
@@ -451,7 +462,14 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">
+
+                                            @error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-2"><i class="fas fa-plus"></i></button></td>
                                     </tr>
@@ -502,7 +520,13 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">
+                                            @error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-3"><i class="fas fa-plus"></i></button></td>
                                     </tr>
@@ -553,7 +577,13 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">
+                                            @error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-4"><i class="fas fa-plus"></i></button></td>
                                     </tr>
@@ -604,7 +634,13 @@
                                     </tr>
                                     <tr>
                                         <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td><input type="file" name="file_upload[]"></td>
+                                        <td>
+                                            <input type="file" name="file_upload[]">
+                                            @error('file_upload')
+                                            <br>
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </td>
                                         <td><input type="date" name="time_upload" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                                         <td><button type="button" class="btn btn-success plus-5"><i class="fas fa-plus"></i></button></td>
                                     </tr>

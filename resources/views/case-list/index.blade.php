@@ -25,7 +25,7 @@
                 <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                     <thead style="font-weight: bold;">
                         <tr>
-                            <td rowspan="2"></td>
+                            <td rowspan="2" class="border-0">Detail</td>
                             <td rowspan="2" class="border" style="text-align: center; align-items: center;">No</td>
                             <td rowspan="2" class="border">File No</td>
                             <td rowspan="2" class="border">Initial Adj</td>
@@ -133,53 +133,12 @@
             className: 'dtr-control',
             responsivePriority: 1,
             targets: 0
+        }, {
+            responsivePriority: 2,
+            targets: 1
         }],
         orderable: true,
         searchable: true
     });
-
-    // $(document).ready(function() {
-    //     // $('#table').DataTable();
-    //     var table = $('.table').DataTable({
-    //         processing: true,
-    //         serverSide: true,
-    //         ajax: "{{ route('case-list.index') }}",
-    //         columns: [{
-    //                 data: 'DT_RowIndex',
-    //                 name: 'DT_RowIndex'
-    //             },
-    //             {
-    //                 data: 'file_no',
-    //                 name: 'file_no'
-    //             },
-    //             {
-    //                 data: 'adjuster',
-    //                 name: 'adjuster'
-    //             },
-    //             {
-    //                 data: 'insurance_client',
-    //                 name: 'insurance_client'
-    //             },
-    //             {
-    //                 data: 'leader_or_member',
-    //                 name: 'leader_or_member'
-    //             },
-    //             {
-    //                 data: 'leader_or_member',
-    //                 name: 'leader_or_member'
-    //             },
-    //             {
-    //                 data: 'adjuster',
-    //                 name: 'adjuster'
-    //             },
-    //             {
-    //                 data: 'action',
-    //                 name: 'action',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //         ]
-    //     });
-    // })
 </script>
 @stop

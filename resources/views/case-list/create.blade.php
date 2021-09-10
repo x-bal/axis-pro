@@ -20,18 +20,42 @@
 @endsection
 
 @section('footer')
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    const formatter = function(num) {
+        var str = num.toString().replace("", ""),
+            parts = false,
+            output = [],
+            i = 1,
+            formatted = null;
+        if (str.indexOf(".") > 0) {
+            parts = str.split(".");
+            str = parts[0];
+        }
+        str = str.split("").reverse();
+        for (var j = 0, len = str.length; j < len; j++) {
+            if (str[j] != ",") {
+                output.push(str[j]);
+                if (i % 3 == 0 && j < (len - 1)) {
+                    output.push(",");
+                }
+                i++;
+            }
+        }
+        formatted = output.reverse().join("");
+        return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+    };
+
+    function rupiah(e) {
+        e.value = formatter(e.value)
+    }
     $(document).ready(function() {
-        setTimeout(function() {
+
             $('#incident').select2();
             $('#policy').select2();
             $('#broker').select2();
             $('#adjuster').select2();
             $('#insurance').select2();
-        }, 1000)
+        
     })
 
 
@@ -86,12 +110,14 @@
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-        if (total > 100) {
+        if (total > 100 || total < 100) {
             $('#submit_case_list').addClass('disabled')
+            $('#submit_case_list').attr('disabled', true)
             $('#add').addClass('disabled')
             $('#total').html('Lebih')
         } else {
             $('#submit_case_list').removeClass('disabled')
+            $('#submit_case_list').removeAttr('disabled')
             $('#add').removeClass('disabled')
             $('#total').html(total)
         }

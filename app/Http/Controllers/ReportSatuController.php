@@ -45,7 +45,7 @@ class ReportSatuController extends Controller
         if ($request->hasFile('file_upload')) {
             $files = $request->file('file_upload');
             foreach ($files as $file) {
-                $name = time() . \Str::random(15) . '.' . $file->extension();
+                $name = date('dmYHis')  . '-' . $file->getClientOriginalName();
                 $filename = 'files/report-satu/' . $name;
 
                 if (in_array($file->extension(), ['jpeg', 'jpg', 'png'])) {
