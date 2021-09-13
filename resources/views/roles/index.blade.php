@@ -8,7 +8,9 @@
                     <div>
                         {{ __('Role List') }}
                     </div>
+                    @can('role-access')
                     <a href="{{ route('roles.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @endcan
                 </div>
 
                 <table class="table table-striped table-bordered" width="100%">
@@ -25,12 +27,16 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $role->name }}</td>
                             <td>
+                                @can('role-edit')
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('role-delete')
                                 <form action="{{ route('roles.destroy', $role->id) }}" method="post" style="display: inline;" onclick="return confirm('Delete data?')">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

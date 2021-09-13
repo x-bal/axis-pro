@@ -7,36 +7,26 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        abort_unless(Gate::allows('permission-access'), 403);
+
         return view('permission.index', [
             'permissions' => Permission::get()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        abort_unless(Gate::allows('permission-create'), 403);
+
         return view('permission.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('permission-create'), 403);
+
         $attr = $request->validate([
             'name' => 'required'
         ]);
@@ -47,37 +37,22 @@ class PermissionController extends Controller
         return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Permission $permission)
     {
+        abort_unless(Gate::allows('permission-edit'), 403);
+
         return view('permission.edit', compact('permission'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Permission $permission)
     {
+        abort_unless(Gate::allows('permission-edit'), 403);
+
         $attr = $request->validate([
             'name' => 'required'
         ]);
@@ -87,14 +62,10 @@ class PermissionController extends Controller
         return redirect()->route('permission.index')->with('success', 'Permission has been updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Permission $permission)
     {
+        abort_unless(Gate::allows('permission-delete'), 403);
+
         $permission->delete();
         return redirect()->route('permission.index')->with('success', 'Permission has been deleted');
     }

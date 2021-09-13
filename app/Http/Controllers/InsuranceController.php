@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class InsuranceController extends Controller
 {
     public function index()
     {
+        abort_unless(Gate::allows('insurance-access'), 403);
+
         return view('insurance.index', [
             'clients' => Client::get()
         ]);
@@ -17,6 +21,8 @@ class InsuranceController extends Controller
 
     public function create()
     {
+        abort_unless(Gate::allows('insurance-create'), 403);
+
         return view('insurance.create', [
             'client' => new Client()
         ]);
@@ -24,6 +30,8 @@ class InsuranceController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('insurance-create'), 403);
+
         $attr = $this->validate($request, [
             'brand' => 'required',
             'name' => 'required',
@@ -58,6 +66,8 @@ class InsuranceController extends Controller
 
     public function edit(Client $insurance)
     {
+        abort_unless(Gate::allows('insurance-edit'), 403);
+
         return view('insurance.edit', [
             'client' => $insurance
         ]);
@@ -65,6 +75,8 @@ class InsuranceController extends Controller
 
     public function update(Request $request, Client $insurance)
     {
+        abort_unless(Gate::allows('insurance-edit'), 403);
+
         $attr = $this->validate($request, [
             'brand' => 'required',
             'name' => 'required',
@@ -81,7 +93,7 @@ class InsuranceController extends Controller
         try {
             if ($request->picture) {
                 $picture = $request->file('picture');
-                \Storage::delete($insurance->picture);
+                Storage::delete($insurance->picture);
                 $pictureUrl = $picture->storeAs('public/images/insurance', \Str::random(15) . '.' . $picture->extension());
                 $attr['picture'] = $pictureUrl;
                 $insurance->update($attr);
@@ -97,7 +109,9 @@ class InsuranceController extends Controller
 
     public function destroy(Client $insurance)
     {
-        \Storage::delete($insurance->picture);
+        abort_unless(Gate::allows('insurance-delete'), 403);
+
+        Storage::delete($insurance->picture);
         $insurance->delete();
         return redirect()->route('insurance.index')->with('success', 'Insurance has been deleted');
     }

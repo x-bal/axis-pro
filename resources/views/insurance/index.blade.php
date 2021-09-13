@@ -8,7 +8,9 @@
                     <div>
                         {{ __('Insurance List') }}
                     </div>
+                    @can('insurance-access')
                     <a href="{{ route('insurance.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @endcan
                 </div>
                 <table class="table table-striped table-bordered">
                     <thead>
@@ -40,12 +42,16 @@
                             <td>{{ $client->ppn }}</td>
                             <td>{{ $client->type }}</td>
                             <td>
+                                @can('insurance-edit')
                                 <a href="{{ route('insurance.edit', $client->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('insurance-delete')
                                 <form action="{{ route('insurance.destroy', $client->id) }}" method="post" style="display: inline;" onclick="return confirm('Delete data?')">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

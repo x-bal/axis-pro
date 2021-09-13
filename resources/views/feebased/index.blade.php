@@ -8,7 +8,9 @@
                     <div>
                         {{ __('Fee Base List') }}
                     </div>
+                    @can('fee-based-create')
                     <a href="{{ route('fee-based.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @endcan
                 </div>
                 <table class="table table-striped table-bordered" width="100%">
                     <thead>
@@ -32,12 +34,16 @@
                             <td>{{ $fee->fee_usd }}</th>
                             <td>{{ $fee->category_fee }}</th>
                             <td>
+                                @can('fee-based-edit')
                                 <a href="{{ route('fee-based.edit', $fee->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('fee-based-delete')
                                 <form action="{{ route('fee-based.destroy', $fee->id) }}" method="post" style="display: inline;" onclick="return confirm('Delete data?')">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

@@ -8,7 +8,10 @@
                     <div>
                         {{ __('Bank List') }}
                     </div>
+
+                    @can('bank-create')
                     <a href="{{ route('bank.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @endcan
                 </div>
                 <table class="table table-striped table-bordered" width="100%">
                     <thead>
@@ -28,12 +31,16 @@
                             <td>{{ $bank->no_account }}</td>
                             <td>{{ $bank->currency }}</td>
                             <td>
+                                @can('bank-edit')
                                 <a href="{{ route('bank.edit', $bank->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('bank-delete')
                                 <form action="{{ route('bank.destroy', $bank->id) }}" method="post" style="display: inline;" onclick="return confirm('Delete data?')">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

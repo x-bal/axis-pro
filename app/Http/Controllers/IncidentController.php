@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Incident;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class IncidentController extends Controller
 {
     public function index()
     {
+        abort_unless(Gate::allows('incident-access'), 403);
+
         return view('causeofloss.index', [
             'incidents' => Incident::get()
         ]);
@@ -16,11 +19,15 @@ class IncidentController extends Controller
 
     public function create()
     {
+        abort_unless(Gate::allows('incident-create'), 403);
+
         return view('causeofloss.create');
     }
 
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('incident-create'), 403);
+
         $form = $this->validate($request, [
             'type_incident' => 'required',
             'description' => 'required'
@@ -38,6 +45,8 @@ class IncidentController extends Controller
 
     public function edit(Incident $causeOfLoss)
     {
+        abort_unless(Gate::allows('incident-edit'), 403);
+
         return view('causeofloss.edit', [
             'incident' => $causeOfLoss
         ]);
@@ -45,6 +54,8 @@ class IncidentController extends Controller
 
     public function update(Request $request, Incident $causeOfLoss)
     {
+        abort_unless(Gate::allows('incident-edit'), 403);
+
         $form = $this->validate($request, [
             'type_incident' => 'required',
             'description' => 'required'
@@ -56,6 +67,8 @@ class IncidentController extends Controller
 
     public function destroy(Incident $causeOfLoss)
     {
+        abort_unless(Gate::allows('incident-delete'), 403);
+
         $causeOfLoss->delete();
         return redirect()->route('cause-of-loss.index')->with('success', 'Cause of loss has been deleted');
     }

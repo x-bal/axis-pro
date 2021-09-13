@@ -6,42 +6,33 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        abort_unless(Gate::allows('user-access'), 403);
+
         return view('users.index', [
             'users' => User::get(),
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        abort_unless(Gate::allows('user-create'), 403);
+
         return view('users.create', [
             'roles' => Role::get(),
             'user' => new User
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('user-create'), 403);
+
         $attr = $this->validate($request, [
             'nama_lengkap' => 'required',
             'no_telepon' => 'required',
@@ -57,40 +48,25 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User has been created');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $user)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $user)
     {
+        abort_unless(Gate::allows('user-edit'), 403);
+
         $roles = Role::all();
         // $userRole = $user->roles->pluck('name', 'name')->all();
 
         return view('users.edit', compact('user', 'roles',));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
+        abort_unless(Gate::allows('user-edit'), 403);
+
         $attr = $this->validate($request, [
             'nama_lengkap' => 'required',
             'no_telepon' => 'required',
@@ -110,14 +86,11 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User has been created');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
-        //
+        abort_unless(Gate::allows('user-delte'), 403);
+
+        $user->delete();
+        return redirect()->route('users.index')->with('success', 'User has been deleted');
     }
 }

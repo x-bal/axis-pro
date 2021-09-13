@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Broker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BrokerController extends Controller
 {
     public function index()
     {
+        abort_unless(Gate::allows('broker-access'), 403);
+
         return view('broker.index', [
             'brokers' => Broker::get()
         ]);
@@ -16,6 +19,7 @@ class BrokerController extends Controller
 
     public function create()
     {
+        abort_unless(Gate::allows('broker-create'), 403);
 
         return view('broker.create', [
             'broker' => new Broker()
@@ -24,6 +28,7 @@ class BrokerController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('broker-create'), 403);
         $attr = $this->validate($request, [
             'nama_broker' => 'required',
             'telepon_broker' => 'required',
@@ -44,6 +49,8 @@ class BrokerController extends Controller
 
     public function edit(Broker $broker)
     {
+        abort_unless(Gate::allows('broker-edit'), 403);
+
         return view('broker.edit', [
             'broker' => $broker
         ]);
@@ -51,6 +58,8 @@ class BrokerController extends Controller
 
     public function update(Request $request, Broker $broker)
     {
+        abort_unless(Gate::allows('broker-edit'), 403);
+
         $attr = $this->validate($request, [
             'nama_broker' => 'required',
             'telepon_broker' => 'required',
@@ -64,6 +73,8 @@ class BrokerController extends Controller
 
     public function destroy(Broker $broker)
     {
+        abort_unless(Gate::allows('broker-delete'), 403);
+
         $broker->delete();
         return redirect()->route('broker.index')->with('success', 'Broker has been created');
     }

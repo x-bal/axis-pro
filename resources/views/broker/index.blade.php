@@ -8,7 +8,9 @@
                     <div>
                         {{ __('Broker List') }}
                     </div>
+                    @cab('broker-access')
                     <a href="{{ route('broker.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @endcan
                 </div>
                 <table class="table table-striped table-bordered" width="100%">
                     <thead>
@@ -30,12 +32,16 @@
                             <td>{{ $broker->email_broker }}</td>
                             <td>{{ $broker->alamat_broker }}</td>
                             <td>
+                                @can('broker-edit')
                                 <a href="{{ route('broker.edit', $broker->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('broker-edit')
                                 <form action="{{ route('broker.destroy', $broker->id) }}" method="post" style="display: inline;" onclick="return confirm('Delete data?')">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

@@ -450,23 +450,6 @@
                         </form>
                         @endif
 
-                        <form action="" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <table width="658" border="0" class="table">
-                                <tbody>
-                                    <tr>
-                                        <td width="170">Report Status</td>
-                                        <td width="214">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
-
                         <table width="265" border="0" class="table table-striped">
                             <tbody>
                                 <tr>
