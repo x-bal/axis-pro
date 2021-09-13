@@ -1,22 +1,25 @@
 <?php
 
-use App\Http\Controllers\BankController;
-use App\Http\Controllers\BrokerController;
-use App\Http\Controllers\CaseListController;
-use App\Http\Controllers\ClaimDocumentController;
-use App\Http\Controllers\FeeBasedController;
-use App\Http\Controllers\FileSurveyController;
-use App\Http\Controllers\IncidentController;
-use App\Http\Controllers\InsuranceController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\PolicyController;
-use App\Http\Controllers\ReportDuaController;
-use App\Http\Controllers\ReportEmpatController;
-use App\Http\Controllers\ReportLimaController;
-use App\Http\Controllers\ReportSatuController;
-use App\Http\Controllers\ReportTigaController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    BankController,
+    BrokerController,
+    CaseListController,
+    ClaimDocumentController,
+    ExpenseController,
+    FeeBasedController,
+    FileSurveyController,
+    IncidentController,
+    InsuranceController,
+    PermissionController,
+    PolicyController,
+    ReportDuaController,
+    ReportEmpatController,
+    ReportLimaController,
+    ReportSatuController,
+    ReportTigaController,
+    RoleController,
+    UserController
+};
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/roles', RoleController::class);
     Route::resource('/permission', PermissionController::class);
 
+    Route::resource('expense', ExpenseController::class);
     Route::resource('file-survey', FileSurveyController::class);
     Route::resource('claim-document', ClaimDocumentController::class);
     Route::resource('report-satu', ReportSatuController::class);

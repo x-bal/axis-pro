@@ -12,6 +12,11 @@ class Expense extends Model
 
     public function category()
     {
-        return $this->belongsTo(CategoryExpense::class);
+        return $this->belongsTo(CategoryExpense::class, 'category_expense_id');
+    }
+
+    public function caselist()
+    {
+        return $this->belongsTo(CaseList::class);
     }
 }

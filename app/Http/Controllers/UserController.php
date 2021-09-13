@@ -47,7 +47,6 @@ class UserController extends Controller
             'no_telepon' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
-            'role' => 'required'
         ]);
 
         $attr['password'] = \Hash::make($request->password);
@@ -96,7 +95,7 @@ class UserController extends Controller
             'nama_lengkap' => 'required',
             'no_telepon' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required'
+            // 'role' => 'required'
         ]);
 
         if ($request->password != null) {
@@ -106,7 +105,7 @@ class UserController extends Controller
         }
 
         $user->update($attr);
-        $user->assignRole($request->input('role'));
+        $user->syncRoles($request->input('role'));
 
         return redirect()->route('users.index')->with('success', 'User has been created');
     }

@@ -43,7 +43,8 @@ class PermissionController extends Controller
         $attr['name'] = \Str::slug($request->name);
 
         Permission::create($attr);
-        return redirect()->route('permission.index')->with('success', 'Permission has been created');
+        // return redirect()->route('permission.index')->with('success', 'Permission has been created');
+        return back();
     }
 
     /**

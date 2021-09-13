@@ -3,11 +3,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header" style="font-size: 18px;">
-                {{ __('Cause Of Loss List') }}
-                <a href="{{ route('cause-of-loss.create') }}" class="btn btn-primary float-right"><i class="fas fa-pen"></i> Create</a>
-            </div>
             <div class="card-body">
+                <div class="d-flex justify-content-between mb-5" style="font-size: 18px;">
+                    <div>
+                        {{ __('Cause Of Loss List') }}
+                    </div>
+                    <a href="{{ route('cause-of-loss.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                </div>
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>

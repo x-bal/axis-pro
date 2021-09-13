@@ -71,4 +71,9 @@ class CaseList extends Model
     {
         return $this->belongsTo(FileStatus::class, 'file_status_id');
     }
+
+    public function expense()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

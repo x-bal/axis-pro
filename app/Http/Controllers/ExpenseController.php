@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ExpenseImport;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Excel;
 
 class ExpenseController extends Controller
 {
@@ -35,7 +37,12 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'file_upload' => 'required'
+        ]);
+
+        Excel::import(new ExpenseImport($request->case_list_id), $request->file('file_upload'));
+        return back()->with('success', 'Import expense successfully');
     }
 
     /**

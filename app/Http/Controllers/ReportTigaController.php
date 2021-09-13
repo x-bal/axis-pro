@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReportTiga;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ReportTigaController extends Controller
 {
@@ -73,7 +74,7 @@ class ReportTigaController extends Controller
      */
     public function show(ReportTiga $reportTiga)
     {
-        //
+        return Storage::download($reportTiga->file_upload);
     }
 
     /**

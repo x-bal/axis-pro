@@ -38,7 +38,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="password">Password</label>
-            <input name="password" id="password" type="text" value="" class="form-control @error('password') is-invalid @enderror">
+            <input name="password" id="password" type="password" value="" class="form-control @error('password') is-invalid @enderror">
             @error('password')
             <div class="invalid-feedback">
                 {{ $message }}
@@ -50,16 +50,17 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="role">Role</label>
-            <select name="roles[]" id="roles" class="form-control select2" multiple="multiple" required style="width: 100%; height:36px;">
-                @foreach($roles as $id => $roles)
-                <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || isset($user) && $user->roles->contains($id)) ? 'selected' : '' }}>{{ $roles }}</option>
+            <select name="role[]" id="role" class="form-control select2" multiple="multiple">
+                @foreach($user->roles as $rol)
+                <option selected value="{{ $rol->id }}">{{ $rol->name }}</option>
+                @endforeach
+                @foreach($roles as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
             </select>
 
             @error('role')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
+            <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
     </div>

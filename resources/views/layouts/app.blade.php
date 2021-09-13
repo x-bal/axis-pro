@@ -51,13 +51,13 @@
                         <li class="nav-item {{ request()->is('home*') ? 'active' : '' }}">
                             <a href="/home" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                         </li>
-                        <!-- <li class="nav-item {{ request()->is('insurance*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('insurance*') ? 'active' : '' }}">
                             <a href="{{ route('insurance.index') }}" class="nav-link"><i class="fas fa-comments"></i> Insurance</a>
-                        </li> -->
+                        </li>
                         <li class="nav-item {{ request()->is('case-list*') ? 'active' : '' }}">
                             <a href="{{ route('case-list.index') }}" class="nav-link"><i class="fas fa-list-alt"></i> Case List</a>
                         </li>
-                        <!-- <li class="nav-item {{ request()->is('case-list*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('case-list*') ? 'active' : '' }}">
                             <a href="{{ route('case-list.index') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Invoice</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -85,7 +85,7 @@
                                 <a class="dropdown-item {{ request()->is('roles*') ? 'active' : '' }}" href="{{ route('roles.index') }}">Roles</a>
                                 <a class="dropdown-item {{ request()->is('permission*') ? 'active' : '' }}" href="{{ route('permission.index') }}">Permission</a>
                             </div>
-                        </li> -->
+                        </li>
                     </ul>
                     @endauth
                     <!-- Right Side Of Navbar -->
@@ -134,6 +134,9 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <script src="{{ asset('/js/select2.full.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>

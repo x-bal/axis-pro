@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FileSurvey;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Image;
 
 class FileSurveyController extends Controller
@@ -75,7 +76,7 @@ class FileSurveyController extends Controller
      */
     public function show(FileSurvey $fileSurvey)
     {
-        //
+        return Storage::download($fileSurvey->file_upload);
     }
 
     /**

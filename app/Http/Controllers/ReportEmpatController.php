@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReportEmpat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ReportEmpatController extends Controller
 {
@@ -73,7 +74,7 @@ class ReportEmpatController extends Controller
      */
     public function show(ReportEmpat $reportEmpat)
     {
-        //
+        return Storage::download($reportEmpat->file_upload);
     }
 
     /**

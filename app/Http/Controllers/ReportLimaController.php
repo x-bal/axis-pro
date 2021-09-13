@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReportLima;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ReportLimaController extends Controller
 {
@@ -73,7 +74,7 @@ class ReportLimaController extends Controller
      */
     public function show(ReportLima $reportLima)
     {
-        //
+        return Storage::download($reportLima->file_upload);
     }
 
     /**

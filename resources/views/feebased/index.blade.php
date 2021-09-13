@@ -3,11 +3,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header" style="font-size: 18px;">
-                {{ __('Fee Based List') }}
-                <a href="{{ route('fee-based.create') }}" class="btn btn-primary float-right"><i class="fas fa-pen"></i> Create</a>
-            </div>
             <div class="card-body">
+                <div class="d-flex justify-content-between mb-5" style="font-size: 18px;">
+                    <div>
+                        {{ __('Fee Base List') }}
+                    </div>
+                    <a href="{{ route('fee-based.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                </div>
                 <table class="table table-striped table-bordered" width="100%">
                     <thead>
                         <tr>

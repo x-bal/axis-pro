@@ -17,11 +17,14 @@
 
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-primary text-white" style="font-size: 18px;">{{ __('Case List') }}
-                <a href="{{ route('case-list.create') }}" class="btn btn-light float-right"><i class="fas fa-pen"></i> Create</a>
-            </div>
-
             <div class="card-body">
+                <div class="d-flex justify-content-between mb-5" style="font-size: 18px;">
+                    <div>
+                        {{ __('Case List') }}
+                    </div>
+                    <a href="{{ route('case-list.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                </div>
+
                 <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                     <thead style="font-weight: bold;">
                         <tr>
