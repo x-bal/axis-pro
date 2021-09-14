@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaseList;
 use App\Models\ReportDua;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -41,6 +42,8 @@ class ReportDuaController extends Controller
             'case_list_id' => 'required',
             'file_upload' => 'required',
             'time_upload' => 'required',
+            'pr_amount' => 'required',
+            'ir_status' => 'required',
         ]);
 
         if ($request->hasFile('file_upload')) {
@@ -62,6 +65,14 @@ class ReportDuaController extends Controller
                 ]);
             }
         }
+
+        $caseList = CaseList::find($request->case_list_id);
+        $caseList->update([
+            'pr_amount' => $request->pr_amount,
+            'pr_status' => 1,
+            'pr_date' => Carbon::now(),
+            'ir_status' => $request->ir_status,
+        ]);
 
         return back()->with('success', 'Report dua has been uploaded');
     }

@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     FileSurveyController,
     IncidentController,
     InsuranceController,
+    InvoiceController,
     PermissionController,
     PolicyController,
     ReportDuaController,
@@ -43,6 +44,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/case-list/status', [CaseListController::class, 'status'])->name('caselist.status');
     Route::resource('/case-list', CaseListController::class);
     Route::resource('/cause-of-loss', IncidentController::class);
     Route::resource('/type-of-business', PolicyController::class);
@@ -53,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permission', PermissionController::class);
+    Route::resource('invoice', InvoiceController::class);
 
     Route::resource('expense', ExpenseController::class);
     Route::resource('file-survey', FileSurveyController::class);

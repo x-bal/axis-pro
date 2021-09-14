@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaseList;
 use App\Models\ReportLima;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,6 +63,14 @@ class ReportLimaController extends Controller
                 ]);
             }
         }
+
+        $caseList = CaseList::find($request->case_list_id);
+
+        $caseList->update([
+            'fr_amount' => $request->fr_amount,
+            'fr_status' => 1,
+            'fr_date' => Carbon::now(),
+        ]);
 
         return back()->with('success', 'Report lima has been uploaded');
     }

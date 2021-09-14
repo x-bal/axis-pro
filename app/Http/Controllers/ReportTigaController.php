@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaseList;
 use App\Models\ReportTiga;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -61,6 +62,22 @@ class ReportTigaController extends Controller
                     'time_upload' => Carbon::now()
                 ]);
             }
+        }
+
+        $caseList = CaseList::find($request->case_list_id);
+
+        if ($caseList->ir_status == 1) {
+            $caseList->update([
+                'ir_st_amount' => $request->ir_st_amount,
+                'ir_st_status' => 1,
+                'ir_st_date' => Carbon::now(),
+            ]);
+        } else {
+            $caseList->update([
+                'pa_amount' => $request->pa_amount,
+                'pa_status' => 1,
+                'pa_date' => Carbon::now(),
+            ]);
         }
 
         return back()->with('success', 'Report tiga has been uploaded');

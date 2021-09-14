@@ -35,11 +35,13 @@
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-3' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pr_status == 1 ? '?page=nav-report-3' : '#' }}">Report 3</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-4' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->ir_st_status == 1 ? '?page=nav-report-4' : '#' }}">Report 4</a>
+                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-4' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '?page=nav-report-4' : '#' }}">Report 4</a>
                     </li>
+                    @if($caseList->ir_status == 1)
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->ir_nd_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
+                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
                     </li>
+                    @endif
                 </ul>
 
                 <div class="tab-content">
@@ -384,7 +386,41 @@
                     @if(request()->get('page') == "nav-report-1")
                     <div class="tab-pane fade show active mt-3" id="nav-report-1" aria-labelledby="nav-report-1-tab">
                         <h5 class="">Report 1 </h5>
-                        <span class="text-secondary">Exp Date : {{Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y') }} </span>
+                        <table>
+                            <tr>
+                                <td width="250">Survey Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->survey_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td width="250">Limit</td>
+                                <td> : </td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($caseList->survey_date)->addDay(7)->format('d/m/Y')}} (7 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Now Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>You Have Exceed From Report 1</td>
+                                <td> : </td>
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->survey_date)->format('d/m/Y')
+                                @endphp
+                                <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
+                            </tr>
+                            <tr>
+                                <td>Date Uploaded</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->survey_date)->addDay(7)->format('d/m/Y')}}</td>
+                            </tr>
+                        </table>
 
                         <form action="{{ route('report-satu.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
@@ -408,47 +444,24 @@
                                     </tr>
                                 </tbody>
                                 <tr>
+                                    <td width="197">Amount</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="ia_amount" class="form-control" value="{{ $caseList->ia_amount ?? '' }}">
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
                                     <td><input type="submit" class="btn btn-success" value="Upload"></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
                             </table>
                         </form>
-
-                        @if(Carbon\Carbon::now()->format('d/M/Y') >= Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y'))
-                        <form action="{{ route('report-satu.store') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <table width="658" border="0" class="table mt-3">
-                                <tbody>
-                                    <tr>
-                                        <td width="170">Reason</td>
-                                        <td width="214">&nbsp;</td>
-                                        <td width="170">Report Status</td>
-                                    </tr>
-                                    <tr>
-                                        <input type="hidden" name="case_list_id" value="{{ $caseList->id }}">
-                                        <td>
-                                            <textarea name="comment" id="comment" cols="" rows="3" class="form-control"></textarea>
-                                            @error('comment')
-                                            <br>
-                                            <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-                                            <br>
-                                            <button type="submit" class="btn btn-success">Send</button>
-                                        </td>
-                                        <td>&nbsp;</td>
-                                        <td>
-                                            <select name="ia_status" id="ia_status" class="form-control" disabled read-only>
-                                                <option value="{{ $caseList->ia_status ?? 0 }}" {{ $caseList->ia_status == 0 ? 'selected' : '' }}>Outstanding</option>
-                                                <option value="{{ $caseList->ia_status ?? 1}}" {{ $caseList->ia_status == 1 ? 'selected' : '' }}>Closed</option>
-                                            </select>
-                                            <!-- <button type="submit" class="btn btn-success">Send</button> -->
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
-                        @endif
 
                         <table width="265" border="0" class="table table-striped">
                             <tbody>
@@ -485,11 +498,47 @@
 
                     @if(request()->get('page') == "nav-report-2" && $caseList->ia_status == 1)
                     <div class="tab-pane fade show active mt-3" id="nav-report-2" aria-labelledby="nav-report-2-tab">
-                        <h5 class="mb-3">Report 2 </h5>
+                        <h5 class="">Report 2 </h5>
+
+                        <table>
+                            <tr>
+                                <td width="250">Last Update From Report 1</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td width="250">Limit</td>
+                                <td> : </td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($caseList->ia_date)->addDay(14)->format('d/m/Y')}} (14 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Now Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>You Have Exceed From Report 2</td>
+                                <td> : </td>
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                @endphp
+                                <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
+                            </tr>
+                            <tr>
+                                <td>Date Uploaded</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->ia_date)->addDay(14)->format('d/m/Y')}}</td>
+                            </tr>
+                        </table>
 
                         <form action="{{ route('report-dua.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <table width="658" border="0" class="table table-2">
+                            <table width="658" border="0" class="table table-2 mt-3">
                                 <tbody>
                                     <tr>
                                         <td width="197">File Upload</td>
@@ -510,6 +559,30 @@
                                         <td><button type="button" class="btn btn-success plus-2"><i class="fas fa-plus"></i></button></td>
                                     </tr>
                                 </tbody>
+                                <tr>
+                                    <td width="100">Amount</td>
+                                    <td width="100">Interim Report</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="pr_amount" class="form-control" value="{{ $caseList->pr_amount ?? '' }}">
+
+                                        @error('pr_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <select name="ir_status" id="ir_status" class="form-control">
+                                            <option {{ $caseList->ir_status == 0 ? 'selected' : '' }} value="0">No</option>
+                                            <option {{ $caseList->ir_status == 1 ? 'selected' : '' }} value="1">Yes</option>
+                                        </select>
+                                        @error('ir_status')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
                                 <tr>
                                     <td><input type="submit" class="btn btn-success" value="Upload"></td>
                                     <td>&nbsp;</td>
@@ -543,11 +616,49 @@
 
                     @if(request()->get('page') == "nav-report-3" && $caseList->pr_status == 1)
                     <div class="tab-pane fade show active mt-3" id="nav-report-3" aria-labelledby="nav-report-3-tab">
-                        <h5 class="mb-3">Report 3 </h5>
+                        <h5 class="">Report 3 </h5>
+
+                        <h6>({{ $caseList->ir_status == 0 ? 'Propose Adjustment' : 'Interim Report'}})</h6>
+
+                        <table>
+                            <tr>
+                                <td width="250">Last Update From Report 2</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->pr_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td width="250">Limit</td>
+                                <td> : </td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($caseList->pr_date)->addDay(14)->format('d/m/Y')}} (14 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Now Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>You Have Exceed From Report 3</td>
+                                <td> : </td>
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                @endphp
+                                <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
+                            </tr>
+                            <tr>
+                                <td>Date Uploaded</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->ia_date)->addDay(14)->format('d/m/Y')}}</td>
+                            </tr>
+                        </table>
 
                         <form action="{{ route('report-tiga.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <table width="658" border="0" class="table table-3">
+                            <table width="658" border="0" class="table table-3 mt-3">
                                 <tbody>
                                     <tr>
                                         <td width="197">File Upload</td>
@@ -567,6 +678,30 @@
                                         <td><button type="button" class="btn btn-success plus-3"><i class="fas fa-plus"></i></button></td>
                                     </tr>
                                 </tbody>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @if($caseList->ir_status == 1)
+                                        <input type="number" name="ir_st_amount" class="form-control" value="{{ $caseList->ir_st_amount ?? '' }}">
+
+                                        @error('ir_st_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                        @else
+                                        <input type="number" name="pa_amount" class="form-control" value="{{ $caseList->pa_amount ?? '' }}">
+
+                                        @error('pa_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                        @endif
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
                                 <tr>
                                     <td><input type="submit" class="btn btn-success" value="Upload"></td>
                                     <td>&nbsp;</td>
@@ -598,13 +733,64 @@
                     </div>
                     @endif
 
-                    @if(request()->get('page') == "nav-report-4" && $caseList->ir_st_status == 1)
+                    @if(request()->get('page') == "nav-report-4" && $caseList->pa_status == 1 || $caseList->ir_st_status == 1)
                     <div class="tab-pane fade show active mt-3" id="nav-report-4" aria-labelledby="nav-report-4-tab">
-                        <h5 class="mb-3">Report 4 </h5>
+                        <h5 class="">Report 4 </h5>
+
+                        <h6>({{ $caseList->ir_status == 1 ? 'Propose Adjustment' : 'Final Report'}})</h6>
+
+                        <table>
+                            <tr>
+                                <td width="250">Last Update From Report 3</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->ir_st_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td width="250">Limit</td>
+                                <td> : </td>
+                                <td>
+                                    @if($caseList->ir_status == 0)
+                                    {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(14)->format('d/m/Y')}} (14 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(15)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                    @else
+                                    {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(7)->format('d/m/Y')}} (7 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->ir_st_date)->addDay(8)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Now Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>You Have Exceed From Report 4</td>
+                                <td> : </td>
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                @endphp
+                                <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
+                            </tr>
+                            <tr>
+                                <td>Date Uploaded</td>
+                                <td> : </td>
+                                <td>
+                                    @if($caseList->ir_status == 0)
+                                    {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(14)->format('d/m/Y')}} (14 Days)
+                                    @else
+                                    {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(7)->format('d/m/Y')}} (7 Days)
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
 
                         <form action="{{ route('report-empat.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <table width="658" border="0" class="table table-4">
+                            <table width="658" border="0" class="table table-4 mt-3">
                                 <tbody>
                                     <tr>
                                         <td width="197">File Upload</td>
@@ -624,6 +810,30 @@
                                         <td><button type="button" class="btn btn-success plus-4"><i class="fas fa-plus"></i></button></td>
                                     </tr>
                                 </tbody>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @if($caseList->ir_status == 1)
+                                        <input type="number" name="pa_amount" class="form-control" value="{{ $caseList->pa_amount ?? '' }}">
+
+                                        @error('pa_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                        @else
+                                        <input type="number" name="fr_amount" class="form-control" value="{{ $caseList->fr_amount ?? '' }}">
+
+                                        @error('fr_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                        @endif
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
                                 <tr>
                                     <td><input type="submit" class="btn btn-success" value="Upload"></td>
                                     <td>&nbsp;</td>
@@ -655,13 +865,54 @@
                     </div>
                     @endif
 
-                    @if(request()->get('page') == "nav-report-5" && $caseList->ir_nd_status == 1)
+                    @if($caseList->ir_status == 1 && $caseList->pa_status == 1)
+                    @if(request()->get('page') == "nav-report-5")
                     <div class="tab-pane fade show active mt-3" id="nav-report-5" aria-labelledby="nav-report-5-tab">
-                        <h5 class="mb-3">Report 5 </h5>
+                        <h5 class="">Report 5 </h5>
+
+                        <h6>(Final Report)</h6>
+
+                        <table>
+                            <tr>
+                                <td width="250">Last Update From Report 4</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td width="250">Limit</td>
+                                <td> : </td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(7)->format('d/m/Y')}} (7 Days)
+                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(8)->format('d/m/Y'))
+                                    <small class="text-danger">*You Have Exceeded From Limit</small>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Now Date</td>
+                                <td> : </td>
+                                <td>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>You Have Exceed From Report 4</td>
+                                <td> : </td>
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                @endphp
+                                <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
+                            </tr>
+                            <tr>
+                                <td>Date Uploaded</td>
+                                <td> : </td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(7)->format('d/m/Y')}} (7 Days)
+                                </td>
+                            </tr>
+                        </table>
 
                         <form action="{{ route('report-lima.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <table width="658" border="0" class="table table-5">
+                            <table width="658" border="0" class="table table-5 mt-3">
                                 <tbody>
                                     <tr>
                                         <td width="197">File Upload</td>
@@ -681,6 +932,22 @@
                                         <td><button type="button" class="btn btn-success plus-5"><i class="fas fa-plus"></i></button></td>
                                     </tr>
                                 </tbody>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="fr_amount" class="form-control" value="{{ $caseList->fr_amount ?? '' }}">
+
+                                        @error('fr_amount')
+                                        <small class="text-danger"> {{ $message }}</small>
+                                        @enderror
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
                                 <tr>
                                     <td><input type="submit" class="btn btn-success" value="Upload"></td>
                                     <td>&nbsp;</td>
@@ -711,6 +978,7 @@
                         </table>
                     </div>
                     @endif
+                    @endif
                 </div>
 
                 <div class="button mt-3">
@@ -729,60 +997,62 @@
 <script src="https://code.jquery.com/jquery-1.7.2.min.js" integrity="sha256-R7aNzoy2gFrVs+pNJ6+SokH04ppcEqJ0yFLkNGoFALQ=" crossorigin="anonymous"></script>
 
 <script>
-    let tr = `<tr>
+    $(document).ready(function() {
+        let tr = `<tr>
                 <td><input type="file" name="file_upload[]"></td>
                 <td><input type="date" name="time_upload" class="form-control" id="" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}"></td>
                 <td><button type="button" class="btn btn-danger remove-survey"><i class="fas fa-times"></i></button></td>
             </tr>`;
 
-    $(".plus-survey").on('click', function() {
-        $(".table-survey").append(tr)
-    })
+        $(".plus-survey").on('click', function() {
+            $(".table-survey").append(tr)
+        })
 
-    $(".plus-claim").on('click', function() {
-        $(".table-claim").append(tr)
-    })
+        $(".plus-claim").on('click', function() {
+            $(".table-claim").append(tr)
+        })
 
-    $(".plus-1").on('click', function() {
-        $(".table-1").append(tr)
-    })
+        $(".plus-1").on('click', function() {
+            $(".table-1").append(tr)
+        })
 
-    $(".plus-2").on('click', function() {
-        $(".table-2").append(tr)
-    })
+        $(".plus-2").on('click', function() {
+            $(".table-2").append(tr)
+        })
 
-    $(".plus-3").on('click', function() {
-        $(".table-3").append(tr)
-    })
+        $(".plus-3").on('click', function() {
+            $(".table-3").append(tr)
+        })
 
-    $(".plus-4").on('click', function() {
-        $(".table-4").append(tr)
-    })
+        $(".plus-4").on('click', function() {
+            $(".table-4").append(tr)
+        })
 
-    $(".plus-5").on('click', function() {
-        $(".table-5").append(tr)
-    })
+        $(".plus-5").on('click', function() {
+            $(".table-5").append(tr)
+        })
 
-    $(".remove-survey").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-claim").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-1").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-2").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-3").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-4").live('click', function() {
-        $(this).parent().parent().remove();
-    })
-    $(".remove-5").live('click', function() {
-        $(this).parent().parent().remove();
+        $(".remove-survey").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-claim").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-1").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-2").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-3").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-4").live('click', function() {
+            $(this).parent().parent().remove();
+        })
+        $(".remove-5").live('click', function() {
+            $(this).parent().parent().remove();
+        })
     })
 </script>
 @stop

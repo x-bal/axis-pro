@@ -8,7 +8,7 @@
                     <div>
                         {{ __('Broker List') }}
                     </div>
-                    @cab('broker-access')
+                    @can('broker-access')
                     <a href="{{ route('broker.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
                     @endcan
                 </div>

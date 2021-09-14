@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaseList;
 use App\Models\ReportSatu;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,6 +63,14 @@ class ReportSatuController extends Controller
                 ]);
             }
         }
+
+        $caseList = CaseList::find($request->case_list_id);
+        $caseList->update([
+            'ia_amount' => $request->ia_amount,
+            'ia_status' => 1,
+            'ia_date' => Carbon::now(),
+            'pr_date' => Carbon::now()->addDay(7),
+        ]);
 
         return back()->with('success', 'Report satu has been uploaded');
     }

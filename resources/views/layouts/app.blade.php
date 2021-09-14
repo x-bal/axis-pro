@@ -62,8 +62,8 @@
                         </li>
                         @endcan
                         @can('invoice-access')
-                        <li class="nav-item {{ request()->is('case-list*') ? 'active' : '' }}">
-                            <a href="{{ route('case-list.index') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Invoice</a>
+                        <li class="nav-item {{ request()->is('invoice*') ? 'active' : '' }}">
+                            <a href="{{ route('invoice.index') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Invoice</a>
                         </li>
                         @endcan
                         @can('master-access')

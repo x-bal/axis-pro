@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaseList;
 use App\Models\ReportEmpat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,6 +63,23 @@ class ReportEmpatController extends Controller
                 ]);
             }
         }
+
+        $caseList = CaseList::find($request->case_list_id);
+
+        if ($caseList->ir_status == 1) {
+            $caseList->update([
+                'ir_nd_amount' => $request->ir_nd_amount,
+                'ir_nd_status' => 1,
+                'ir_nd_date' => Carbon::now(),
+            ]);
+        } else {
+            $caseList->update([
+                'fr_amount' => $request->fr_amount,
+                'fr_status' => 1,
+                'fr_date' => Carbon::now(),
+            ]);
+        }
+
 
         return back()->with('success', 'Report empat has been uploaded');
     }
