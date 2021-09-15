@@ -13,6 +13,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="insurance">Insurance</label>
@@ -45,6 +46,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="category">Category</label>
@@ -59,6 +61,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="insured">Insured</label>
@@ -70,6 +73,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="dol">Dol</label>
@@ -93,17 +97,6 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="claim_amount">Claim Amount</label>
-            <input type="text" value="@isset($caseList->claim_amount) {{ number_format($caseList->claim_amount) }} @endisset" oninput="rupiah(this)" id="claim_amount" name="claim_amount" class="form-control @error('claim_amount') is-invalid @enderror">
-            @error('claim_amount')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-    </div>
 
     <div class="col-md-3">
         <div class="form-group">
@@ -119,6 +112,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="broker">Broker</label>
@@ -134,6 +128,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="incident">Incident</label>
@@ -149,6 +144,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="policy">Policy</label>
@@ -164,6 +160,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="no_leader_policy">No Leader Policy </label>
@@ -175,6 +172,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="begin">Begin</label>
@@ -186,6 +184,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="end">End</label>
@@ -197,6 +196,7 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="instruction_date">Instruction Date</label>
@@ -208,7 +208,32 @@
             @enderror
         </div>
     </div>
+
+    <!-- <div class="col-md-3">
+        <div class="form-group">
+            <label for="survey_date">Survey Date</label>
+            <input class="form-control @error('survey_date') is-invalid @enderror" value="{{ $caseList->survey_date ?? '' }}" name="survey_date" id="survey_date" type="date">
+            @error('survey_date')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div> -->
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label for="leader_claim_no">Leader Claim No</label>
+            <input class="form-control @error('leader_claim_no') is-invalid @enderror" value="{{ $caseList->leader_claim_no ?? '' }}" name="leader_claim_no" id="leader_claim_no" type="text">
+            @error('leader_claim_no')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
@@ -222,7 +247,7 @@
                             <th>Member Share</th>
                             <th>Status</th>
                             <th class="text-center">
-                                <a onclick="AddForm()" class="btn btn-outline-success" id="add">Add Member</a>
+                                <a onclick="AddForm()" class="btn btn-sm btn-outline-success" id="add">Add Member</a>
                             </th>
                         </tr>
                     </thead>
@@ -256,7 +281,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a onclick="DeleteForm(this)" class="btn btn-outline-danger">Delete</a>
+                                    <a onclick="DeleteForm(this)" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                             </td>
                         </tr>
@@ -342,7 +367,7 @@
                     </td>
                     <td class="text-center">
                         <div class="btn-group">
-                            <a onclick="DeleteForm(this)" class="btn btn-outline-danger">Delete</a>
+                            <a onclick="DeleteForm(this)" class="btn btn-sm btn-outline-danger">Delete</a>
                     </div>
                 </td>
             </tr>

@@ -69,6 +69,7 @@ class ReportSatuController extends Controller
             'ia_amount' => $request->ia_amount,
             'ia_status' => 1,
             'ia_date' => Carbon::now(),
+            'now_update' => Carbon::now(),
             'pr_date' => Carbon::now()->addDay(7),
         ]);
 

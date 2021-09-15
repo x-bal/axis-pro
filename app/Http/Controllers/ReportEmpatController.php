@@ -68,15 +68,18 @@ class ReportEmpatController extends Controller
 
         if ($caseList->ir_status == 1) {
             $caseList->update([
-                'ir_nd_amount' => $request->ir_nd_amount,
-                'ir_nd_status' => 1,
-                'ir_nd_date' => Carbon::now(),
+                'pa_amount' => $request->pa_amount,
+                'pa_status' => 1,
+                'pa_date' => Carbon::now(),
+                'now_update' => Carbon::now(),
             ]);
         } else {
             $caseList->update([
                 'fr_amount' => $request->fr_amount,
+                'claim_amount' => $request->fr_amount,
                 'fr_status' => 1,
                 'fr_date' => Carbon::now(),
+                'now_update' => Carbon::now(),
             ]);
         }
 

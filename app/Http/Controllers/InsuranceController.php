@@ -47,7 +47,7 @@ class InsuranceController extends Controller
 
         try {
             $picture = $request->file('picture');
-            $pictureUrl = $picture->storeAs('public/images/insurance', $request->name . '_' . \Str::random(15) . '.' . $picture->extension());
+            $pictureUrl = $picture->storeAs('images/insurance', $request->name . '_' . \Str::random(15) . '.' . $picture->extension());
             // Client::create($request->all());
             $attr['picture'] = $pictureUrl;
             $attr['is_active'] = 1;
@@ -94,7 +94,7 @@ class InsuranceController extends Controller
             if ($request->picture) {
                 $picture = $request->file('picture');
                 Storage::delete($insurance->picture);
-                $pictureUrl = $picture->storeAs('public/images/insurance', \Str::random(15) . '.' . $picture->extension());
+                $pictureUrl = $picture->storeAs('images/insurance', \Str::random(15) . '.' . $picture->extension());
                 $attr['picture'] = $pictureUrl;
                 $insurance->update($attr);
                 return back();

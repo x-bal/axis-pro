@@ -45,6 +45,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
     Route::post('/case-list/status', [CaseListController::class, 'status'])->name('caselist.status');
+    Route::post('/case-list/ir-status', [CaseListController::class, 'irstatus']);
+    Route::post('/case-list/getcase', [CaseListController::class, 'getcase']);
     Route::resource('/case-list', CaseListController::class);
     Route::resource('/cause-of-loss', IncidentController::class);
     Route::resource('/type-of-business', PolicyController::class);

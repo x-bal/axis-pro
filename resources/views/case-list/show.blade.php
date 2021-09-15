@@ -39,7 +39,7 @@
                     </li>
                     @if($caseList->ir_status == 1)
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
+                        <a class="nav-link nav-tab r5 {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
                     </li>
                     @endif
                 </ul>
@@ -56,7 +56,7 @@
                                     <td width="12%">CURRENT STATUS</td>
                                     <td width="2%">:</td>
                                     <td width="31%">
-                                        <select name="kategori" class="form-control kategori">
+                                        <select name="status" class="form-control status">
                                             @foreach($status as $stt)
                                             <option {{ $stt->id == $caseList->file_status_id ? 'selected' : '' }} value="{{ $stt->id }}">{{ $stt->nama_status }}</option>
                                             @endforeach
@@ -124,7 +124,9 @@
                                     <td>{{ $caseList->now_update }}</td>
                                     <td>AGING (DAY)</td>
                                     <td>:</td>
-                                    <td>NOW UPDATE - INSTRUCTION DATE</td>
+                                    <td>
+                                        {{ (int)Carbon\Carbon::parse($caseList->now_update)->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->instruction_date)->format('d/m/Y') }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -411,7 +413,7 @@
                                 <td>You Have Exceed From Report 1</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->survey_date)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('d/m/Y')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -525,7 +527,7 @@
                                 <td>You Have Exceed From Report 2</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('d/m/Y')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -645,7 +647,7 @@
                                 <td>You Have Exceed From Report 3</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('d/m/Y')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -770,9 +772,16 @@
                             <tr>
                                 <td>You Have Exceed From Report 4</td>
                                 <td> : </td>
+                                @if($caseList->ir_status == 0)
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') -(int)Carbon\Carbon::parse($caseList->pa_date)->addDay(15)->format('d/m/Y')
                                 @endphp
+                                @else
+                                @php
+                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') -(int)Carbon\Carbon::parse($caseList->ir_st_date)->addDay(8)->format('d/m/Y')
+                                @endphp
+                                @endif
+
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
                             <tr>
@@ -780,7 +789,7 @@
                                 <td> : </td>
                                 <td>
                                     @if($caseList->ir_status == 0)
-                                    {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(14)->format('d/m/Y')}} (14 Days)
+                                    {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(14)->format('d/m/Y')}} (14 Days)
                                     @else
                                     {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(7)->format('d/m/Y')}} (7 Days)
                                     @endif
@@ -1052,6 +1061,67 @@
         })
         $(".remove-5").live('click', function() {
             $(this).parent().parent().remove();
+        })
+    })
+
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#ir_status").on('change', function() {
+            let id = "{{ $caseList->id }}";
+            let status = $(this).val();
+
+            $.ajax({
+                method: 'POST',
+                type: 'POST',
+                url: '/case-list/ir-status',
+                data: {
+                    id: id,
+                    status: status,
+                },
+                success: function(result) {
+                    iziToast.success({
+                        title: 'Success',
+                        message: result.message,
+                        position: 'topRight',
+                    });
+
+                    if (result.case_list.ir_status == 1) {
+                        $("#myTabs").append(`<li class="nav-item">
+                        <a class="nav-link nav-tab r5 {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
+                    </li>`)
+                    } else {
+                        $(".r5").remove()
+                    }
+                }
+            })
+        });
+
+
+        $(".status").on('change', function() {
+            let id = "{{ $caseList->id }}";
+            let status = $(this).val();
+
+            $.ajax({
+                method: 'POST',
+                type: 'POST',
+                url: '/case-list/status',
+                data: {
+                    id: id,
+                    status: status,
+                },
+                success: function(result) {
+                    iziToast.success({
+                        title: 'Success',
+                        message: result.message,
+                        position: 'topRight',
+                    });
+                }
+            })
         })
     })
 </script>

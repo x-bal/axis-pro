@@ -71,6 +71,7 @@ class ReportDuaController extends Controller
             'pr_amount' => $request->pr_amount,
             'pr_status' => 1,
             'pr_date' => Carbon::now(),
+            'now_update' => Carbon::now(),
             'ir_status' => $request->ir_status,
         ]);
 

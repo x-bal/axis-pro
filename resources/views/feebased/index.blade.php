@@ -28,11 +28,11 @@
                         @foreach($feebased as $fee)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $fee->adjusted_idr }}</th>
-                            <td>{{ $fee->adjusted_usd }}</th>
-                            <td>{{ $fee->fee_idr }}</th>
-                            <td>{{ $fee->fee_usd }}</th>
-                            <td>{{ $fee->category_fee }}</th>
+                            <td>{{ number_format($fee->adjusted_idr) }}</th>
+                            <td>{{ number_format($fee->adjusted_usd) }}</th>
+                            <td>{{ number_format($fee->fee_idr) }}</th>
+                            <td>{{ number_format($fee->fee_usd) }}</th>
+                            <td>{{ $fee->category_fee == 1 ? 'Marine' : 'Non Marine' }}</th>
                             <td>
                                 @can('fee-based-edit')
                                 <a href="{{ route('fee-based.edit', $fee->id) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>

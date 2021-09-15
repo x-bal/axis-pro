@@ -71,12 +71,14 @@ class ReportTigaController extends Controller
                 'ir_st_amount' => $request->ir_st_amount,
                 'ir_st_status' => 1,
                 'ir_st_date' => Carbon::now(),
+                'now_update' => Carbon::now(),
             ]);
         } else {
             $caseList->update([
                 'pa_amount' => $request->pa_amount,
                 'pa_status' => 1,
                 'pa_date' => Carbon::now(),
+                'now_update' => Carbon::now(),
             ]);
         }
 

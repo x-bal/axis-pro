@@ -68,8 +68,10 @@ class ReportLimaController extends Controller
 
         $caseList->update([
             'fr_amount' => $request->fr_amount,
+            'claim_amount' => $request->fr_amount,
             'fr_status' => 1,
             'fr_date' => Carbon::now(),
+            'now_update' => Carbon::now(),
         ]);
 
         return back()->with('success', 'Report lima has been uploaded');

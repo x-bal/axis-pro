@@ -48,8 +48,8 @@
             <label for="category_fee">Category Fee</label>
             <select name="category_fee" id="category_fee" type="text" class="form-control @error('category_fee') is-invalid @enderror">
                 <option disabled selected>Select Category</option>
-                <option value="1" {{ $feebased->category_fee == 1 ? 'selected' : ''}}>Marinir</option>
-                <option value="2" {{ $feebased->category_fee == 2 ? 'selected' : ''}}>Non Marinir</option>
+                <option value="1" {{ $feebased->category_fee == 1 ? 'selected' : ''}}>Marine</option>
+                <option value="2" {{ $feebased->category_fee == 2 ? 'selected' : ''}}>Non Marine</option>
             </select>
             @error('category_fee')
             <div class="invalid-feedback">

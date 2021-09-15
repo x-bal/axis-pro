@@ -18,3 +18,9 @@
     </div>
 </div>
 @endsection
+
+@section('footer')
+<script>
+    $("#permission").select2()
+</script>
+@stop

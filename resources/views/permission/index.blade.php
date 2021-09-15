@@ -31,7 +31,7 @@
                                 <td>{{ $permission->name }}</td>
                                 <td>
                                     @can('permission-edit')
-                                    <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
                                     @endcan
                                     @can('permission-delete')
                                     <form action="{{ route('permission.destroy', $permission->id) }}" method="post" style="display: inline;" class="delete-form">
@@ -50,4 +50,10 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('footer')
+<script>
+    $(".table").DataTable()
+</script>
 @stop
