@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use App\Models\Client;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class InsuranceController extends Controller
         abort_unless(Gate::allows('insurance-create'), 403);
 
         return view('insurance.create', [
-            'client' => new Client()
+            'client' => new Client(),
+            'bank'=> Bank::get()
         ]);
     }
 
@@ -42,7 +44,8 @@ class InsuranceController extends Controller
             'status' => 'required',
             'ppn' => 'required',
             'type' => 'required',
-            'picture' => 'required'
+            'picture' => 'required',
+            'bank_id' => 'required'
         ]);
 
         try {
@@ -69,7 +72,8 @@ class InsuranceController extends Controller
         abort_unless(Gate::allows('insurance-edit'), 403);
 
         return view('insurance.edit', [
-            'client' => $insurance
+            'client' => $insurance,
+            'bank' => Bank::get()
         ]);
     }
 
@@ -87,7 +91,7 @@ class InsuranceController extends Controller
             'status' => 'required',
             'ppn' => 'required',
             'type' => 'required',
-            'picture' => 'required'
+            'bank_id' => 'required'
         ]);
 
         try {
