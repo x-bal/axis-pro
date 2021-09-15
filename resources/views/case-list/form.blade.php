@@ -4,7 +4,11 @@
             <label for="file_no">File No</label>
             <!-- <input name="file_no" id="file_no" type="text" value="{{ $caseList->file_no ?? '' }}" class="form-control @error('file_no') is-invalid @enderror"> -->
 
-            <input name="file_no" id="file_no" type="text" value="{{ $caseList->file_no ?? '' }}" class="form-control @error('file_no') is-invalid @enderror">
+            <select name="file_no" id="file_no" class="form-control @error('file_no') is-invalid @enderror">
+                @foreach($file_no as $data)
+                <option @if($caseList->file_no == $data) selected @endif value="{{ $data }}">{{ $data }}</option>
+                @endforeach
+            </select>
 
             @error('file_no')
             <div class="invalid-feedback">
@@ -301,29 +305,29 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    const formatter = function(num) {
-        var str = num.toString().replace("", ""),
-            parts = false,
-            output = [],
-            i = 1,
-            formatted = null;
-        if (str.indexOf(".") > 0) {
-            parts = str.split(".");
-            str = parts[0];
-        }
-        str = str.split("").reverse();
-        for (var j = 0, len = str.length; j < len; j++) {
-            if (str[j] != ",") {
-                output.push(str[j]);
-                if (i % 3 == 0 && j < (len - 1)) {
-                    output.push(",");
-                }
-                i++;
-            }
-        }
-        formatted = output.reverse().join("");
-        return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-    };
+    // const formatter = function(num) {
+    //     var str = num.toString().replace("", ""),
+    //         parts = false,
+    //         output = [],
+    //         i = 1,
+    //         formatted = null;
+    //     if (str.indexOf(".") > 0) {
+    //         parts = str.split(".");
+    //         str = parts[0];
+    //     }
+    //     str = str.split("").reverse();
+    //     for (var j = 0, len = str.length; j < len; j++) {
+    //         if (str[j] != ",") {
+    //             output.push(str[j]);
+    //             if (i % 3 == 0 && j < (len - 1)) {
+    //                 output.push(",");
+    //             }
+    //             i++;
+    //         }
+    //     }
+    //     formatted = output.reverse().join("");
+    //     return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+    // };
 
     function rupiah(e) {
         e.value = formatter(e.value)
@@ -334,6 +338,9 @@
         $('#broker').select2();
         $('#adjuster').select2();
         $('#insurance').select2();
+            $('#file_no').select2({
+                tags: true
+            })
     }, 1000)
 
     function form_dinamic() {

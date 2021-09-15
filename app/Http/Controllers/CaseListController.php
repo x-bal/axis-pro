@@ -65,7 +65,8 @@ class CaseListController extends Controller
             'user' => User::role('adjuster')->get(),
             'broker' => Broker::get(),
             'incident' => Incident::get(),
-            'policy' => Policy::get()
+            'policy' => Policy::get(),
+            'file_no' => Caselist::pluck('file_no')
         ]);
     }
 

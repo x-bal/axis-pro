@@ -2,17 +2,18 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header" style="font-size: 18px;">
-                {{ __('Edit Cause Of Loss') }}
-                <a href="{{ route('cause-of-loss.index') }}" class="btn btn-primary float-right"><i class="fas fa-arrow-left"></i> Back</a>
-            </div>
+        <div class="card shadow">
             <div class="card-body">
-                <form action="{{ route('cause-of-loss.update', $incident->id) }}" method="post">
+                <div class="d-flex justify-content-between p-2">
+                    <a href="{{ route('insurance.index') }}" class="btn btn-outline-info">Back</a>
+
+                    <h5>Insurance List</h5>
+                </div>
+                <form action="{{ route('insurance.update', $client->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    @method('PATCH')
-                    @include('causeofloss.form')
-                    <button type="submit" class="btn btn-primary float-right">Update</button>
+                    @method('put')
+                    @include('insurance.form')
+                    <button type="submit" class="btn btn-outline-success float-right">Store</button>
                 </form>
             </div>
         </div>
