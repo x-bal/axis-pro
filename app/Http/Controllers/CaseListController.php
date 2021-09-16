@@ -46,10 +46,10 @@ class CaseListController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
-                    <form action="" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm("Delete data?")"><i class="fas fa-trash"></i></button>
-                </form>';
+                    $btn = '<a href="/case-list/' . $row->id . '/edit" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>';
+                    //     $btn .= "<form action='' method='post' style='display: inline;'>
+                    //     <button type='submit' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></button>
+                    // </form>";
 
                     return $btn;
                 })
@@ -78,11 +78,21 @@ class CaseListController extends Controller
         $this->validate($request, [
             'file_no' => 'required',
             'risk_location' => 'required',
-            'leader' => 'required',
+            // 'leader' => 'required',
             'begin' => 'required',
             'end' => 'required',
             'dol' => 'required',
-            'insured' => 'required'
+            'insured' => 'required',
+            'insurance' => 'required',
+            'adjuster' => 'required',
+            'category' => 'required',
+            'currency' => 'required',
+            'broker' => 'required',
+            'incident' => 'required',
+            'policy' => 'required',
+            'no_leader_policy' => 'required',
+            'instruction_date' => 'required',
+            'leader_claim_no' => 'required',
         ]);
         // $amount = str_replace(',', '', $request->amount);
         // $claim_amount = str_replace(',', '', $request->claim_amount);
@@ -98,11 +108,14 @@ class CaseListController extends Controller
                 'insured' => $request->insured,
                 'risk_location' => $request->risk_location,
                 'currency' => $request->currency,
-                'leader' => $request->leader,
+                'leader' => $request->insurance,
                 'begin' => $request->begin,
                 'end' => $request->end,
                 'dol' => $request->dol,
                 'category' => $request->category,
+                'no_leader_policy' => $request->no_leader_policy,
+                'instruction_date' => $request->instruction_date,
+                'leader_claim_no' => $request->leader_claim_no,
                 'file_status_id' => 1
             ]);
             for ($i = 1; $i <= count($request->member); $i++) {
@@ -136,12 +149,59 @@ class CaseListController extends Controller
 
     public function edit(CaseList $caseList)
     {
-        //
+        return view('case-list.edit', [
+            'caseList' => $caseList,
+            'client' => Client::get(),
+            'user' => User::role('adjuster')->get(),
+            'broker' => Broker::get(),
+            'incident' => Incident::get(),
+            'policy' => Policy::get(),
+            'file_no' => Caselist::pluck('file_no')
+        ]);
     }
 
     public function update(Request $request, CaseList $caseList)
     {
-        //
+        try {
+            $member = array_values($request->member);
+            $share = array_values($request->percent);
+            $status = array_values($request->status);
+            // $amount = str_replace(',', '', $request->amount);
+            // $claim_amount = str_replace(',', '', $request->claim_amount);
+            DB::beginTransaction();
+            $caseList->update([
+                'file_no' => $request->file_no,
+                'insurance_id' => $request->insurance,
+                'adjuster_id' => $request->adjuster,
+                'broker_id' => $request->broker,
+                'incident_id' => $request->incident,
+                'policy_id' => $request->policy,
+                'insured' => $request->insured,
+                'risk_location' => $request->risk_location,
+                'currency' => $request->currency,
+                'leader' => $request->insurance,
+                'begin' => $request->begin,
+                'end' => $request->end,
+                'dol' => $request->dol,
+                'category' => $request->category,
+            ]);
+            MemberInsurance::where('file_no_outstanding', $caseList->id)->delete();
+            for ($i = 0; $i < count($request->member); $i++) {
+                MemberInsurance::create([
+                    'file_no_outstanding' => $caseList->id,
+                    'member_insurance' => $member[$i],
+                    'share' => $share[$i],
+                    'is_leader' => $status[$i] == 'LEADER' ? 1 : 0,
+                    'invoice_leader' => 1
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('case-list.index')->with('success', 'Case list has been updated');
+        } catch (Exception $th) {
+            dd($th);
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     public function destroy(CaseList $caseList)
