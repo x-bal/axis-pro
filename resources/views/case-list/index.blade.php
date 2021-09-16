@@ -41,6 +41,7 @@
                             <!-- <td rowspan="2" class="border">Claim of Amount</td>
                                 <td rowspan="2" class="border">Instruction Date</td> -->
                             <td rowspan="2" class="border">Status</td>
+                            <td rowspan="2" class="border">Action</td>
                         </tr>
                         <tr>
                             <td class="border">Name</td>
@@ -52,6 +53,7 @@
                     <tbody>
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -120,11 +122,11 @@
             //     data: 'adjuster',
             //     name: 'adjuster'
             // },
-            // {
-            //     data: 'action',
-            //     name: 'action',
+            {
+                data: 'action',
+                name: 'action',
 
-            // },
+            },
 
         ],
         responsive: {

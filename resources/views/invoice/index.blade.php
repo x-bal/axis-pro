@@ -17,9 +17,10 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered" id="table">
                         <thead>
                             <tr>
+                                <th>Detail</th>
                                 <th>No</th>
                                 <th>Insurance</th>
                                 <th>Case</th>
@@ -33,12 +34,15 @@
                         <tbody>
                             @foreach($invoice as $inv)
                             <tr>
+                                <td></td>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $inv->caselist }}</td>
-                                <td>{{ $inv->caselist }}</td>
-                                <td>{{ $inv->caselist }}</td>
-                                <td>{{ $inv->caselist }}</td>
-                                <td>{{ $inv->caselist }}</td>
+                                <td>{{ $inv->caselist->insurance->name }}</td>
+                                <td>{{ $inv->caselist->file_no }}</td>
+                                <td>{{ $inv->no_invoice }}</td>
+                                <td>{{ $inv->date_invoice }}</td>
+                                <td>{{ $inv->due_date }}</td>
+                                <td>{{ number_format($inv->grand_total) }}</td>
+                                <td><span class="badge badge-{{ $inv->status_paid == 1 ? 'success' : 'danger' }} p-1">{{ $inv->status_paid == 1 ? 'Paid' : 'Unpaid' }}</span> </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -61,84 +65,93 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="no_case">No Case</label>
-                            <br>
-                            <select name="" id="no_case" class="form-control" onchange="OnSelect(this)">
-                                <option selected disabled>-- Select Case --</option>
-                                @foreach($caselist as $data)
-                                <option value="{{ $data->id }}">{{ $data->file_no }}</option>
-                                @endforeach
-                            </select>
+                <form action="{{ route('invoice.store') }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="no_case">No Case</label>
+                                <br>
+                                <select name="no_case" id="no_case" class="form-control" onchange="OnSelect(this)">
+                                    <option selected disabled>-- Select Case --</option>
+                                    @foreach($caselist as $data)
+                                    <option value="{{ $data->id }}">{{ $data->file_no }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="claim_amount">Claim Amount</label>
+                                <input type="text" id="claim_amount" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="adjusted">Adjusted</label>
+                                <input type="text" id="adjusted" class="form-control" readonly>
+                                <span class="badge badge-success" id="ForAdjusted"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="claim_amount">Claim Amount</label>
-                            <input type="text" id="claim_amount" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="adjusted">Adjusted</label>
-                            <input type="text" id="adjusted" class="form-control" readonly>
-                            <span class="badge badge-success" id="ForAdjusted"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
+                    <div class="row">
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="fee_based">Fee Based</label>
-                            <input type="text" id="fee_based" class="form-control" readonly>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fee_based">Fee Based</label>
+                                <input type="text" id="fee_based" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Expense</label>
+                                <input type="text" id="expense" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">PPN</label>
+                                <input type="text" id="share" class="form-control" readonly>
+                                <span class="badge badge-primary" id="ForPercent"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Total</label>
+                                <input type="text" id="total" class="form-control" name="total" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Due Date</label>
+                                <input type="date" id="due_date" class="form-control" name="due_date">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="">Expense</label>
-                            <input type="text" id="expense" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="">PPN</label>
-                            <input type="text" id="share" class="form-control" readonly>
-                            <span class="badge badge-primary" id="ForPercent"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="">Total</label>
-                            <input type="text" id="total" class="form-control" readonly>
-                        </div>
-                    </div>
-                </div>
 
-                <hr>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered">
-                            <thead class="bg-primary text-light">
-                                <tr>
-                                    <th>Member</th>
-                                    <th>Member Share</th>
-                                    <th>Nominal</th>
-                                </tr>
-                            </thead>
-                            <tbody id="forLoop">
-                            </tbody>
-                        </table>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead class="bg-primary text-light">
+                                    <tr>
+                                        <th>Member</th>
+                                        <th>Member Share</th>
+                                        <th>Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="forLoop">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -253,7 +266,6 @@
     })
 </script>
 <script>
-    $(".table").DataTable()
     $("#no_case").select2()
 </script>
 @stop

@@ -33,13 +33,15 @@ class InvoiceController extends Controller
         try {
             DB::beginTransaction();
             foreach (CaseList::find($request->no_case)->member as $data) {
-                NoInvoice::create([
-                    'no_invoice' => $data->caselist->file_no,
-                    'due_date' => $data->caselist->end,
+                Invoice::create([
+                    'case_list_id' => $request->no_case,
+                    'no_invoice' => 'INV/' . $data->caselist->file_no . '/' . rand(999, 9999),
+                    'due_date' => $request->due_date,
                     'date_invoice' => Carbon::now()->format('Y-m-d'),
                     'status_paid' => 1,
-                    'created_by' => auth()->user()->id,
-                    'is_active' => 1
+                    // 'created_by' => auth()->user()->id,
+                    'is_active' => 1,
+                    'grand_total' => str_replace(',', '', $request->total)
                 ]);
             }
             DB::commit();

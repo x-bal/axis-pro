@@ -46,7 +46,10 @@ class CaseListController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                    $btn = '<a href="" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
+                    <form action="" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm("Delete data?")"><i class="fas fa-trash"></i></button>
+                </form>';
 
                     return $btn;
                 })

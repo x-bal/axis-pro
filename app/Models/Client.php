@@ -14,4 +14,9 @@ class Client extends Model
     {
         return $this->belongsTo(Client::class, 'insurance_id');
     }
+
+    public function member()
+    {
+        return $this->belongsTo(MemberInsurance::class, 'member_insurance');
+    }
 }
