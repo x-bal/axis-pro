@@ -18,8 +18,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Brand</th>
-                                <th>Name</th>
-                                <th>Address</th>
+                                <th>Nama</th>
+                                <th>Alamat</th>
                                 <th>No Telp</th>
                                 <th>Hp</th>
                                 <th>Email</th>

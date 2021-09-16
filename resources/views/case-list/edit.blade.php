@@ -4,14 +4,14 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header" style="font-size: 18px;">
-                {{ __('Edit Bank') }}
-                <a href="{{ route('bank.index') }}" class="btn btn-primary float-right"><i class="fas fa-arrow-left"></i> Back</a>
+                {{ __('Edit Case List') }}
+                <a href="{{ route('case-list.index') }}" class="btn btn-primary float-right"><i class="fas fa-arrow-left"></i> Back</a>
             </div>
             <div class="card-body">
-                <form action="{{ route('bank.update', $bank->id) }}" method="post">
+                <form action="{{ route('case-list.update', $caseList->id) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    @include('bank.form')
+                    @include('case-list.form')
                     <button type="submit" class="btn btn-primary float-right">Update</button>
                 </form>
             </div>

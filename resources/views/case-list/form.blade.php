@@ -5,6 +5,7 @@
             <!-- <input name="file_no" id="file_no" type="text" value="{{ $caseList->file_no ?? '' }}" class="form-control @error('file_no') is-invalid @enderror"> -->
 
             <select name="file_no" id="file_no" class="form-control @error('file_no') is-invalid @enderror">
+                <option disabled selected>Select File No</option>
                 @foreach($file_no as $data)
                 <option @if($caseList->file_no == $data) selected @endif value="{{ $data }}">{{ $data }}</option>
                 @endforeach
@@ -22,6 +23,7 @@
         <div class="form-group">
             <label for="insurance">Insurance</label>
             <select name="insurance" autocomplete="on" id="insurance" class="form-control @error('insurance') is-invalid @enderror">
+                <option disabled selected>Select Insurance</option>
                 @foreach($client as $data)
                 <option @if($data->id == $caseList->insurance_id) selected @endif value="{{ $data->id }}">{{ $data->brand }} - {{ $data->name }}</option>
                 @endforeach
@@ -39,6 +41,7 @@
         <div class="form-group">
             <label for="adjuster">Adjuster</label>
             <select name="adjuster" id="adjuster" class="form-control @error('adjuster') is-invalid @enderror">
+                <option disabled selected>Select Adjuster</option>
                 @foreach($user as $data)
                 <option @if($data->id == $caseList->adjuster_id) selected @endif value="{{ $data->id }}">{{ $data->nama_lengkap }}</option>
                 @endforeach
@@ -55,8 +58,9 @@
         <div class="form-group">
             <label for="category">Category</label>
             <select name="category" id="category" type="text" class="form-control @error('category') is-invalid @enderror">
-                <option value="1">Marine</option>
-                <option value="2">Non Marine</option>
+                <option disabled selected>Select Category</option>
+                <option {{ $caseList->category == 1 ? 'selected' : '' }} value="1">Marine</option>
+                <option {{ $caseList->category == 2 ? 'selected' : '' }} value="2">Non Marine</option>
             </select>
             @error('category')
             <div class="invalid-feedback">
@@ -106,6 +110,7 @@
         <div class="form-group">
             <label for="currency">Currency</label>
             <select class="form-control @error('currency') is-invalid @enderror" name="currency" id="currency">
+                <option disabled selected>Select Currency</option>
                 <option @if($caseList->currency == 'RP') selected @endif value="RP">RP</option>
                 <option @if($caseList->currency == 'USD') selected @endif value="USD">USD</option>
             </select>
@@ -121,6 +126,7 @@
         <div class="form-group">
             <label for="broker">Broker</label>
             <select class="form-control @error('broker') is-invalid @enderror" name="broker" id="broker">
+                <option disabled selected>Select Broker</option>
                 @foreach($broker as $data)
                 <option @if($data->id == $caseList->broker_id) selected @endif value="{{ $data->id }}">{{ $data->nama_broker }} - {{ $data->alamat_broker }}</option>
                 @endforeach
@@ -137,6 +143,7 @@
         <div class="form-group">
             <label for="incident">Incident</label>
             <select class="form-control @error('incident') is-invalid @enderror incident" name="incident" id="incident">
+                <option disabled selected>Select Incident</option>
                 @foreach($incident as $data)
                 <option @if($data->id == $caseList->incident_id) selected @endif value="{{ $data->id }}">{{ $data->type_incident }}</option>
                 @endforeach
@@ -153,6 +160,7 @@
         <div class="form-group">
             <label for="policy">Policy</label>
             <select class="form-control @error('policy') is-invalid @enderror" name="policy" id="policy">
+                <option disabled selected>Select Policy</option>
                 @foreach($policy as $data)
                 <option @if($data->id == $caseList->policy_id) selected @endif value="{{ $data->id }}">{{ $data->type_policy }}</option>
                 @endforeach
@@ -338,9 +346,9 @@
         $('#broker').select2();
         $('#adjuster').select2();
         $('#insurance').select2();
-            $('#file_no').select2({
-                tags: true
-            })
+        $('#file_no').select2({
+            tags: true
+        })
     }, 1000)
 
     function form_dinamic() {

@@ -153,11 +153,12 @@
 
     <div class="col-md-10">
         <select class="form-control" required name="bank_id" id="bank_id">
+            <option disabled selected>Select Bank</option>
             @foreach($bank as $data)
             <option @if($client->bank_id == $data->id) selected @endif value="{{ $data->id }}">{{ $data->bank_name }}</option>
             @endforeach
-        </select>    
-    @error('type')
+        </select>
+        @error('type')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
