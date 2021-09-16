@@ -36,7 +36,7 @@
                             <tr>
                                 <td></td>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $inv->caselist->insurance->name }}</td>
+                                <td>{{ $inv->member->name }}</td>
                                 <td>{{ $inv->caselist->file_no }}</td>
                                 <td>{{ $inv->no_invoice }}</td>
                                 <td>{{ $inv->date_invoice }}</td>
@@ -80,6 +80,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="claim_amount">Claim Amount</label>
@@ -115,13 +116,19 @@
                                 <span class="badge badge-primary" id="ForPercent"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Total</label>
                                 <input type="text" id="total" class="form-control" name="total" readonly>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">No Invoice</label>
+                                <input type="text" id="no_invoice" class="form-control" name="no_invoice">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Due Date</label>
                                 <input type="date" id="due_date" class="form-control" name="due_date">
@@ -216,15 +223,15 @@
             $('#share').val(formatter(persen))
             let total = parseInt(sub_total) + parseInt(persen)
             $('#total').val(formatter(total))
-            $('#forLoop').html('')
+            // $('#forLoop').html('')
 
 
             $.each(data.caselist.member, function() {
-                $('#forLoop').append("<tr>" +
-                    "<td id=" + this.member_insurance + "_dom>" + TheAjaxFunc(this.member_insurance) + "</td>" +
-                    "<td>" + this.share + "</td>" +
-                    "<td>" + formatter(total * parseInt(this.share) / 100) + "</td>" +
-                    "</tr>")
+                $('#forLoop').append(`<tr>` +
+                    `<td id=` + this.member_insurance + `_dom>` + TheAjaxFunc(this.member_insurance) + `</td>` +
+                    `<td>` + this.share + `</td>` +
+                    `<td>` + formatter(total * parseInt(this.share) / 100) + `</td>` +
+                    `</tr>`)
             })
         } catch (err) {
             console.info(err)
