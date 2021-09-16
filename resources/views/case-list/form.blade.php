@@ -354,8 +354,8 @@
     function form_dinamic() {
         let index = $('#dynamic_form tr').length + 1
         let template = `
-            <tr>
-                <td>
+                <tr>
+                    <td>
                     <div class="form-group">
                         <select name="member[${index}]" id="member_${index}" class="form-control">
                                 @foreach($client as $data)
@@ -383,8 +383,8 @@
                     <td class="text-center">
                         <div class="btn-group">
                             <a onclick="DeleteForm(this)" class="btn btn-sm btn-outline-danger">Delete</a>
-                    </div>
-                </td>
+                        </div>
+                    </td>
             </tr>
     `
         $('#dynamic_form').append(template)
@@ -393,7 +393,6 @@
             $(`#member_${index}`).select2();
         }, 500)
     }
-
     function LetMeHereToCount(qr) {
         let input = $(qr).val()
         let coll = document.querySelectorAll('.percent')
@@ -402,11 +401,11 @@
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-        if (total > 100 || total < 100) {
+        if (total > 100) {
             $('#submit_case_list').addClass('disabled')
-            $('#submit_case_list').attr('disabled', true)
+            $('#submit_case_list').attr('disabled')
             $('#add').addClass('disabled')
-            $('#total').html('Lebih')
+            $('#total').html(total)
         } else {
             $('#submit_case_list').removeClass('disabled')
             $('#submit_case_list').removeAttr('disabled')
@@ -422,7 +421,8 @@
 
     function DeleteForm(qr) {
         event.preventDefault()
+        let number = $(qr).parent().parent().parent().children().children()[1].childNodes[1].childNodes[1].value
         $(qr).parent().parent().parent().remove()
-        LetMeHereToCount()
+        LetMeHereToCount(number)
     }
 </script>

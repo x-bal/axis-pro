@@ -15,13 +15,10 @@ class CreateNoInvoicesTable extends Migration
     {
         Schema::create('no_invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bank_id');
             $table->string('no_invoice');
             $table->date('due_date');
             $table->date('date_invoice');
             $table->integer('created_by');
-            $table->integer('durasi');
-            $table->string('top');
             $table->integer('status_paid');
             $table->integer('is_active');
             $table->timestamps();
