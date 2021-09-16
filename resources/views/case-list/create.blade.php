@@ -11,7 +11,7 @@
                 <form action="{{ route('case-list.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @include('case-list.form')
-                    <button type="submit" class="btn btn-primary float-right">Create</button>
+                    <button type="submit" class="btn btn-primary float-right" id="submit_case_list">Create</button>
                 </form>
             </div>
         </div>

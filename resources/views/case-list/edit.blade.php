@@ -12,7 +12,7 @@
                     @csrf
                     @method('PATCH')
                     @include('case-list.form')
-                    <button type="submit" class="btn btn-primary float-right">Update</button>
+                    <button type="submit" class="btn btn-primary float-right" id="submit_case_list">Update</button>
                 </form>
             </div>
         </div>
