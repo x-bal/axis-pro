@@ -32,16 +32,19 @@ class InvoiceController extends Controller
     {
         try {
             DB::beginTransaction();
+            $total = str_replace(',', '', $request->total);
+            $total = intval($total);
             foreach (CaseList::find($request->no_case)->member as $data) {
                 Invoice::create([
                     'case_list_id' => $request->no_case,
-                    'no_invoice' => 'INV/' . $data->caselist->file_no . '/' . rand(999, 9999),
+                    'member_id' => $data->member_insurance,
+                    'no_invoice' => $request->no_invoice,
                     'due_date' => $request->due_date,
                     'date_invoice' => Carbon::now()->format('Y-m-d'),
                     'status_paid' => 1,
                     // 'created_by' => auth()->user()->id,
                     'is_active' => 1,
-                    'grand_total' => str_replace(',', '', $request->total)
+                    'grand_total' => $total * $data->share / 100
                 ]);
             }
             DB::commit();

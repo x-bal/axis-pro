@@ -100,7 +100,7 @@
                                     <td><span class="bg-secondary p-2 text-light">{{ $caseList->broker->nama_broker }}</span> </td>
                                     <td>CAUSE OF LOSS</td>
                                     <td>:</td>
-                                    <td>{{ $caseList->incident->description }}</td>
+                                    <td>{{ $caseList->incident->type_incident }}</td>
                                 </tr>
                                 <tr>
                                     <td>TYPE OF BUSINESS</td>
@@ -125,7 +125,7 @@
                                     <td>AGING (DAY)</td>
                                     <td>:</td>
                                     <td>
-                                        {{ (int)Carbon\Carbon::parse($caseList->now_update)->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->instruction_date)->format('d/m/Y') }}
+                                        {{ (int)Carbon\Carbon::parse($caseList->now_update)->format('Ymd') - (int)Carbon\Carbon::parse($caseList->instruction_date)->format('Ymd') }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -234,20 +234,27 @@
                                     <td width="10%">Date</td>
                                     <td width="53%">Amount</td>
                                 </tr>
+                                @php
+                                $amount = 0;
+                                @endphp
+
                                 @foreach($caseList->expense as $expense)
                                 <tr>
                                     <td height="25">{{ $loop->iteration }}</td>
                                     <td>{{ $expense->name }}</td>
                                     <td>{{ $expense->category->nama_kategory }}</td>
                                     <td>{{ Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
-                                    <td>Rp. {{ number_format($expense->amount)  }}</td>
+                                    <td>{{ $caseList->currency == 'RP' ? 'Rp.' : '$' }} {{ number_format($expense->amount)  }}</td>
                                 </tr>
+                                @php
+                                $amount += $expense->amount
+                                @endphp
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="4">Total Amount : </td>
-                                    <td>Rp. {{ number_format($expense->sum('amount')) }}</td>
+                                    <td>{{ $caseList->currency == 'RP' ? 'Rp.' : '$' }} {{ number_format($amount) }}</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -399,7 +406,7 @@
                                 <td> : </td>
                                 <td>
                                     {{ Carbon\Carbon::parse($caseList->survey_date)->addDay(7)->format('d/m/Y')}} (7 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('d/m/Y'))
+                                    @if(Carbon\Carbon::now()->format('Ymd') >= Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                 </td>
@@ -413,7 +420,7 @@
                                 <td>You Have Exceed From Report 1</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('Ymd') - (int)Carbon\Carbon::parse($caseList->survey_date)->addDay(8)->format('Ymd')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -513,7 +520,7 @@
                                 <td> : </td>
                                 <td>
                                     {{ Carbon\Carbon::parse($caseList->ia_date)->addDay(14)->format('d/m/Y')}} (14 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('d/m/Y'))
+                                    @if(Carbon\Carbon::now()->format('Ymd') >= Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                 </td>
@@ -527,7 +534,7 @@
                                 <td>You Have Exceed From Report 2</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('Ymd') - (int)Carbon\Carbon::parse($caseList->ia_date)->addDay(15)->format('Ymd')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -633,7 +640,7 @@
                                 <td> : </td>
                                 <td>
                                     {{ Carbon\Carbon::parse($caseList->pr_date)->addDay(14)->format('d/m/Y')}} (14 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('d/m/Y'))
+                                    @if(Carbon\Carbon::now()->format('Ymd') >= Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                 </td>
@@ -647,7 +654,7 @@
                                 <td>You Have Exceed From Report 3</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('Ymd') - (int)Carbon\Carbon::parse($caseList->pr_date)->addDay(15)->format('Ymd')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
@@ -735,7 +742,8 @@
                     </div>
                     @endif
 
-                    @if(request()->get('page') == "nav-report-4" && $caseList->pa_status == 1 || $caseList->ir_st_status == 1)
+                    @if($caseList->pa_status == 1 || $caseList->ir_st_status == 1)
+                    @if(request()->get('page') == "nav-report-4" )
                     <div class="tab-pane fade show active mt-3" id="nav-report-4" aria-labelledby="nav-report-4-tab">
                         <h5 class="">Report 4 </h5>
 
@@ -753,12 +761,12 @@
                                 <td>
                                     @if($caseList->ir_status == 0)
                                     {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(14)->format('d/m/Y')}} (14 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(15)->format('d/m/Y'))
+                                    @if((int)Carbon\Carbon::now()->format('Ymd') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(15)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                     @else
                                     {{ Carbon\Carbon::parse($caseList->ir_st_date)->addDay(7)->format('d/m/Y')}} (7 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->ir_st_date)->addDay(8)->format('d/m/Y'))
+                                    @if((int)Carbon\Carbon::now()->format('Ymd') >= (int)Carbon\Carbon::parse($caseList->ir_st_date)->addDay(8)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                     @endif
@@ -873,6 +881,7 @@
                         </table>
                     </div>
                     @endif
+                    @endif
 
                     @if($caseList->ir_status == 1 && $caseList->pa_status == 1)
                     @if(request()->get('page') == "nav-report-5")
@@ -892,7 +901,7 @@
                                 <td> : </td>
                                 <td>
                                     {{ Carbon\Carbon::parse($caseList->pa_date)->addDay(7)->format('d/m/Y')}} (7 Days)
-                                    @if((int)Carbon\Carbon::now()->format('d/m/Y') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(8)->format('d/m/Y'))
+                                    @if((int)Carbon\Carbon::now()->format('Ymd') >= (int)Carbon\Carbon::parse($caseList->pa_date)->addDay(8)->format('Ymd'))
                                     <small class="text-danger">*You Have Exceeded From Limit</small>
                                     @endif
                                 </td>
@@ -906,7 +915,7 @@
                                 <td>You Have Exceed From Report 4</td>
                                 <td> : </td>
                                 @php
-                                $exceed = (int)Carbon\Carbon::now()->format('d/m/Y') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y')
+                                $exceed = (int)Carbon\Carbon::now()->format('Ymd') - (int)Carbon\Carbon::parse($caseList->ia_date)->format('Ymd')
                                 @endphp
                                 <td>{{ $exceed >= 0 ? $exceed : 0 }} Days</td>
                             </tr>
