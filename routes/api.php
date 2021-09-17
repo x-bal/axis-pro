@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::get('currency', [AjaxController::class, 'currency']);
 Route::get('caselist/{id}', [AjaxController::class, 'caselist']);
 Route::get('insurance/{id}', [AjaxController::class, 'insurance']);
+Route::get('autocomplete', [AjaxController::class, 'TheAutoCompleteFunc']);
