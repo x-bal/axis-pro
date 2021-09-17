@@ -393,6 +393,7 @@
             $(`#member_${index}`).select2();
         }, 500)
     }
+
     function LetMeHereToCount(qr) {
         let input = $(qr).val()
         let coll = document.querySelectorAll('.percent')

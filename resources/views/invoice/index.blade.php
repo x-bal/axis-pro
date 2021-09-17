@@ -12,7 +12,7 @@
                     @can('invoice-access')
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"> Create
                     </button> -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Create</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
                     @endcan
                 </div>
 
@@ -55,17 +55,17 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
+<div class="modal fade" id="exampleModalScrollable" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
+        <div class="modal-content"> 
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Invoice</h5>
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Create Invoice</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('invoice.store') }}" method="post">
+                <form action="{{ route('invoice.store') }}" method="post" id="TheHolyForm">
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
@@ -145,20 +145,32 @@
                             </table>
                         </div>
                     </div>
+                </form>
             </div>
 
             <div class="modal-footer">
+                <button class="btn btn-danger" onclick="Currency(this)" id="">Currency</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="FormSubmit()" class="btn btn-primary" data-primary>Save changes</button>
             </div>
-            </form>
         </div>
     </div>
 </div>
+<style>
+    .modal-dialog {
+        overflow-y: auto !important;
+    }
+</style>
 @stop
 
 @section('footer')
 <script>
+    const Currency = function(qr) {
+        $(qr)
+    }
+    const FormSubmit = function() {
+        $('#TheHolyForm').submit()
+    }
     const formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -203,7 +215,6 @@
         $('#forLoop').html('')
         try {
             let data = await GetResource($(q).val())
-            // console.log(data)
             $('#claim_amount').val(formatter(data.sum.claim_amount))
             $('#adjusted').val(formatter(data.sum.adjusted))
             $('#fee_based').val(formatter(data.sum.fee))
