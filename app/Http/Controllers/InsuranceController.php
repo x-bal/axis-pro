@@ -58,7 +58,6 @@ class InsuranceController extends Controller
             Client::create($attr);
             return redirect()->route('insurance.index')->with('success', 'Insurance has been created');
         } catch (Exception $err) {
-            dd($err);
             return back()->with('error', $err->getMessage());
         }
     }
@@ -108,7 +107,6 @@ class InsuranceController extends Controller
                 return redirect()->route('insurance.index')->with('success', 'Insurance has been updated');
             }
         } catch (Exception $err) {
-            dd($err);
             return back()->with('error', $err->getMessage());
         }
     }

@@ -131,7 +131,6 @@ class CaseListController extends Controller
             return back()->with('success', 'Berhasil Membuat Data');
         } catch (Exception $th) {
             DB::rollBack();
-            dd($th->getMessage());
             return back()->with('error', $th->getMessage());
         }
     }
@@ -162,43 +161,43 @@ class CaseListController extends Controller
     public function update(Request $request, CaseList $caseList)
     {
 
-        if ($request->currency != $caseList->currency) {    
-            
+        if ($request->currency != $caseList->currency) {
+
             $currency = Currency::get()->firstOrFail();
             try {
                 DB::beginTransaction();
                 if ($request->currency == 'RP') {
                     CaseList::where('id', $caseList->id)->update([
-                        'ia_amount' => strval(round($caseList->ia_amount*$currency->kurs)),
-                        'pr_amount' => strval(round($caseList->pr_amount*$currency->kurs)),
-                        'pa_amount' => strval(round($caseList->pa_amount*$currency->kurs)),
-                        'fr_amount' => strval(round($caseList->fr_amount*$currency->kurs)),
-                        'claim_amount' => strval(round($caseList->claim_amount*$currency->kurs))
+                        'ia_amount' => strval(round($caseList->ia_amount * $currency->kurs)),
+                        'pr_amount' => strval(round($caseList->pr_amount * $currency->kurs)),
+                        'pa_amount' => strval(round($caseList->pa_amount * $currency->kurs)),
+                        'fr_amount' => strval(round($caseList->fr_amount * $currency->kurs)),
+                        'claim_amount' => strval(round($caseList->claim_amount * $currency->kurs))
                     ]);
                     foreach ($caseList->expense as $data) {
                         Expense::where('case_list_id', $caseList->id)->update([
-                            'amount' => strval(round($data->amount*$currency->kurs))
+                            'amount' => strval(round($data->amount * $currency->kurs))
                         ]);
                     }
                 }
                 if ($request->currency == 'USD') {
                     CaseList::where('id', $caseList->id)->update([
-                        'ia_amount' => strval(round($caseList->ia_amount/$currency->kurs,2)),
-                        'pr_amount' => strval(round($caseList->pr_amount/$currency->kurs,2)),
-                        'pa_amount' => strval(round($caseList->pa_amount/$currency->kurs,2)),
-                        'fr_amount' => strval(round($caseList->fr_amount/$currency->kurs,2)),
-                        'claim_amount' => strval(round($caseList->claim_amount/$currency->kurs,2))
+                        'ia_amount' => strval(round($caseList->ia_amount / $currency->kurs, 2)),
+                        'pr_amount' => strval(round($caseList->pr_amount / $currency->kurs, 2)),
+                        'pa_amount' => strval(round($caseList->pa_amount / $currency->kurs, 2)),
+                        'fr_amount' => strval(round($caseList->fr_amount / $currency->kurs, 2)),
+                        'claim_amount' => strval(round($caseList->claim_amount / $currency->kurs, 2))
                     ]);
                     foreach ($caseList->expense as $data) {
                         Expense::where('case_list_id', $caseList->id)->update([
-                            'amount' => strval(round($data->amount/$currency->kurs,2))
+                            'amount' => strval(round($data->amount / $currency->kurs, 2))
                         ]);
                     }
                 }
                 DB::commit();
             } catch (Exception $err) {
                 DB::rollBack();
-                dd($err->getMessage());
+                return back()->with('error', $err->getMessage());
             }
         }
         try {
@@ -237,7 +236,6 @@ class CaseListController extends Controller
             DB::commit();
             return redirect()->route('case-list.index')->with('success', 'Case list has been updated');
         } catch (Exception $th) {
-            dd($th);
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }

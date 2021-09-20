@@ -30,6 +30,14 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'total' => 'required',
+            'date_invoice' => 'required',
+            'no_invoice.*' => 'required'
+        ]);
+        if(CaseList::find($request->no_case)->has('member')){
+            return back()->with('error', 'invoiced is already');
+        }
         try {
             DB::beginTransaction();
             $total = str_replace(',', '', $request->total);
@@ -49,9 +57,9 @@ class InvoiceController extends Controller
             DB::commit();
         } catch (Exception $err) {
             DB::rollBack();
-            dd($err->getMessage());
+            return back()->with('error', $err->getMessage());
         }
-        return back()->with('success', 'Berhasil');
+        return back()->with('success', 'Success create Invoice');
     }
 
     public function show(Invoice $invoice)
