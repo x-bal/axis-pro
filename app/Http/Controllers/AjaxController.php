@@ -6,14 +6,29 @@ use App\Models\CaseList;
 use App\Models\Client;
 use App\Models\FeeBased;
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use Exception;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller
 {
+    public function TheAutoCompleteFunc(Request $request)
+    {
+        $data = [];
+        $caseList = CaseList::where('file_no', 'like','%'.$request->q.'%')->get();
+        foreach($caseList as $row){
+            $data[] = ['id' => $row->id, 'text' => $row->file_no];
+        }
+        return response()->json($data);
+    }
     public function insurance($id)
     {
         return response()->json(Client::findOrFail($id));
+    }
+    public function currency()
+    {
+        $response = Currency::first();
+        return response()->json($response);
     }
     public function caselist($id)
     {

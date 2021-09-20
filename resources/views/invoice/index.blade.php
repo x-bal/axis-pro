@@ -12,7 +12,7 @@
                     @can('invoice-access')
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"> Create
                     </button> -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Create</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
                     @endcan
                 </div>
 
@@ -24,8 +24,8 @@
                                 <th>No</th>
                                 <th>Insurance</th>
                                 <th>Case</th>
-                                <th>No Inovice</th>
-                                <th>Tanggal Inovice</th>
+                                <th>No Invoice</th>
+                                <th>Tanggal Invoice</th>
                                 <th>Tanggal Jatuh Invoice</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -39,8 +39,8 @@
                                 <td>{{ $inv->member->name }}</td>
                                 <td>{{ $inv->caselist->file_no }}</td>
                                 <td>{{ $inv->no_invoice }}</td>
-                                <td>{{ $inv->date_invoice }}</td>
                                 <td>{{ $inv->due_date }}</td>
+                                <td>{{ $inv->date_invoice }}</td>
                                 <td>{{ number_format($inv->grand_total) }}</td>
                                 <td><span class="badge badge-{{ $inv->status_paid == 1 ? 'success' : 'danger' }} p-1">{{ $inv->status_paid == 1 ? 'Paid' : 'Unpaid' }}</span> </td>
                             </tr>
@@ -55,17 +55,17 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+<div class="modal fade" id="exampleModalScrollable" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Invoice</h5>
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Create Invoice</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('invoice.store') }}" method="post">
+                <form action="{{ route('invoice.store') }}" method="post" id="TheHolyForm">
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
@@ -73,10 +73,10 @@
                                 <label for="no_case">No Case</label>
                                 <br>
                                 <select name="no_case" id="no_case" class="form-control" onchange="OnSelect(this)">
-                                    <option selected disabled>-- Select Case --</option>
+                                    {{-- <option selected disabled>-- Select Case --</option>
                                     @foreach($caselist as $data)
-                                    <option value="{{ $data->id }}">{{ $data->file_no }}</option>
-                                    @endforeach
+                                        <option value="{{ $data->id }}">{{ $data->file_no }}</option>
+                                        @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -85,6 +85,7 @@
                             <div class="form-group">
                                 <label for="claim_amount">Claim Amount</label>
                                 <input type="text" id="claim_amount" class="form-control" readonly>
+                                <span class="badge badge-info text-light" id="claim_amount_badge"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -107,6 +108,7 @@
                             <div class="form-group">
                                 <label for="">Expense</label>
                                 <input type="text" id="expense" class="form-control" readonly>
+                                <span class="badge badge-info text-light" id="expense_badge"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -120,12 +122,6 @@
                             <div class="form-group">
                                 <label for="">Total</label>
                                 <input type="text" id="total" class="form-control" name="total" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">No Invoice</label>
-                                <input type="text" id="no_invoice" class="form-control" name="no_invoice">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -144,6 +140,7 @@
                                     <tr>
                                         <th>Member</th>
                                         <th>Member Share</th>
+                                        <th>No Invoice</th>
                                         <th>Nominal</th>
                                     </tr>
                                 </thead>
@@ -152,20 +149,71 @@
                             </table>
                         </div>
                     </div>
+                </form>
             </div>
 
             <div class="modal-footer">
+                <button class="btn btn-danger" onclick="Currency()">Currency</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="FormSubmit()" class="btn btn-primary" data-primary>Save changes</button>
             </div>
-            </form>
         </div>
     </div>
 </div>
+<style>
+    .modal- {
+        overflow-y: scroll !important;
+    }
+</style>
 @stop
 
 @section('footer')
 <script>
+    $(`#no_case`).select2({
+        placeholder: 'Select Product',
+        ajax: {
+            url: `/api/autocomplete`,
+            processResults: function(data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        }
+    });
+    async function GetTheCaseList()
+    {
+        let resource = await fetch('/api/autocomplete').then(data => data.json())
+        return resource
+    }
+    const shedString = (string, separator) => {
+        const separatedArray = string.split(separator);
+        const separatedString = separatedArray.join("");
+        return separatedString;
+    }
+    const Currency = async function() {
+        let resource = await fetch('/api/currency').then(data => data.json())
+        let claim_amount = $('#claim_amount').val()
+        let expense = $('#expense').val()
+        claim_amount = parseInt(shedString(claim_amount, ','))
+        expense = parseInt(shedString(expense, ','))
+        console.log(claim_amount, expense)
+        if ($('#ForAdjusted').html() == 'RP') {
+            console.log('RP')
+            console.info(claim_amount * resource.kurs, expense / resource.kurs)
+            $('#claim_amount_badge').html(`Rp. ${formatter(claim_amount)} -> $ ${formatter(claim_amount / resource.kurs)}`)
+            $('#expense_badge').html(`Rp. ${formatter(expense)} -> $ ${formatter(expense / resource.kurs)}`)
+        }
+        if ($('#ForAdjusted').html() == 'USD') {
+            console.log('USD')
+            console.info(claim_amount * resource.kurs, expense * resource.kurs)
+            $('#claim_amount_badge').html(`$ ${formatter(claim_amount)} -> Rp. ${formatter(claim_amount * resource.kurs)}`)
+            $('#expense_badge').html(`$ ${formatter(expense)} -> Rp. ${formatter(expense * resource.kurs)}`)
+        }
+    }
+    const FormSubmit = function() {
+        $('#TheHolyForm').submit()
+    }
     const formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -190,7 +238,6 @@
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
 
-
     const GetResource = function(id) {
         return fetch(`/api/caselist/${id}`)
             .then((data) => {
@@ -208,9 +255,10 @@
         $('#share').val('')
         $('#total').val('')
         $('#forLoop').html('')
+        $('#claim_amount_badge').html('')
+        $('#expense_badge').html('')
         try {
             let data = await GetResource($(q).val())
-            // console.log(data)
             $('#claim_amount').val(formatter(data.sum.claim_amount))
             $('#adjusted').val(formatter(data.sum.adjusted))
             $('#fee_based').val(formatter(data.sum.fee))
@@ -230,6 +278,7 @@
                 $('#forLoop').append(`<tr>` +
                     `<td id=` + this.member_insurance + `_dom>` + TheAjaxFunc(this.member_insurance) + `</td>` +
                     `<td>` + this.share + `</td>` +
+                    `<td>` + `<input class="form-control" required name="no_invoice[]">` + `</td>` +
                     `<td>` + formatter(total * parseInt(this.share) / 100) + `</td>` +
                     `</tr>`)
             })
@@ -239,7 +288,7 @@
         }
     }
 
-    function FindTheInsurance(id) {
+    function FindTheInsurance(id) { 
         return fetch(`/api/insurance/${id}`)
             .then(data => {
                 if (!data.ok) {
@@ -271,8 +320,5 @@
             }
         ]
     })
-</script>
-<script>
-    $("#no_case").select2()
 </script>
 @stop
