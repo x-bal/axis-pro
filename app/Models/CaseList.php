@@ -81,4 +81,8 @@ class CaseList extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+    public function hasInvoice(): bool
+    {
+        return $this->invoice()->exists();
+    }
 }
