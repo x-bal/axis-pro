@@ -39,10 +39,9 @@ class InvoiceController extends Controller
                     'case_list_id' => $request->no_case,
                     'member_id' => $data->member_insurance,
                     'no_invoice' => $request->no_invoice[$key],
-                    'due_date' => $request->due_date,
-                    'date_invoice' => Carbon::parse($request->due_date)->addDays(30)->format('Y-m-d'),
+                    'date_invoice' => $request->date_invoice,
+                    'due_date' => Carbon::parse($request->date_invoice)->addDays(30)->format('Y-m-d'),
                     'status_paid' => 1,
-                    // 'created_by' => auth()->user()->id,
                     'is_active' => 1,
                     'grand_total' => $total * $data->share / 100
                 ]);

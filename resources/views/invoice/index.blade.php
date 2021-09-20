@@ -12,7 +12,11 @@
                     @can('invoice-access')
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"> Create
                     </button> -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
+                        <a href="{{ route('invoice.export') }}" class="btn btn-success">Excel</a>
+                    </div>
+                    
                     @endcan
                 </div>
 
@@ -39,8 +43,8 @@
                                 <td>{{ $inv->member->name }}</td>
                                 <td>{{ $inv->caselist->file_no }}</td>
                                 <td>{{ $inv->no_invoice }}</td>
-                                <td>{{ $inv->due_date }}</td>
                                 <td>{{ $inv->date_invoice }}</td>
+                                <td>{{ $inv->due_date }}</td>
                                 <td>{{ number_format($inv->grand_total) }}</td>
                                 <td><span class="badge badge-{{ $inv->status_paid == 1 ? 'success' : 'danger' }} p-1">{{ $inv->status_paid == 1 ? 'Paid' : 'Unpaid' }}</span> </td>
                             </tr>
@@ -126,8 +130,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="">Due Date</label>
-                                <input type="date" id="due_date" class="form-control" name="due_date">
+                                <label for="">Date Invoice</label>
+                                <input type="date" id="date_invoice" class="form-control" name="date_invoice">
                             </div>
                         </div>
                     </div>
