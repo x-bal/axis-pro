@@ -32,14 +32,28 @@ class InvoiceController extends Controller
     {
         $this->validate($request, [
             'total' => 'required',
+            'fee_based' => 'required',
             'date_invoice' => 'required',
             'no_invoice.*' => 'required'
         ]);
-        if(CaseList::find($request->no_case)->has('member')){
-            return back()->with('error', 'invoiced is already');
+        if (CaseList::find($request->no_case)->hasInvoice()) {
+            return back()->with('error', 'invoiced is already exists');
         }
         try {
             DB::beginTransaction();
+            $fee_based = str_replace(',', '', $request->fee_based);
+            $fee_based = intval($fee_based);
+            $caselist = CaseList::find($request->no_case);
+            if ($caselist->currency == 'RP') {
+                $caselist->update([
+                    'fee_idr' => $fee_based
+                ]);
+            }
+            if ($caselist->currency == 'USD') {
+                $caselist->update([
+                    'fee_usd' => $fee_based
+                ]);
+            }
             $total = str_replace(',', '', $request->total);
             $total = intval($total);
             foreach (CaseList::find($request->no_case)->member as $key => $data) {

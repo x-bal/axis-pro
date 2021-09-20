@@ -117,7 +117,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fee_based">Fee Based</label>
-                                <input type="text" required id="fee_based" class="form-control" readonly>
+                                <input type="text" required id="fee_based" name="fee_based" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -299,7 +299,11 @@
             })
         } catch (err) {
             console.info(err)
-            alert('Data Masih Kosong' + err)
+            iziToast.error({
+                title: 'Error',
+                message: `${err}` ,
+                position: 'topRight',
+            });
         }
     }
 
