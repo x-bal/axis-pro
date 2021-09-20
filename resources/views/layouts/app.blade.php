@@ -183,6 +183,15 @@
         });
     </script>
     @endif
+    @if(session('error'))
+    <script>
+        iziToast.error({
+            title: 'Error',
+            message: '{{ session("error") }}',
+            position: 'topRight',
+        });
+    </script>
+    @endif
 </body>
 
 </html>

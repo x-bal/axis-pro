@@ -149,7 +149,6 @@ class CaseListController extends Controller
             return back()->with('success', 'Berhasil Membuat Data');
         } catch (Exception $th) {
             DB::rollBack();
-            dd($th->getMessage());
             return back()->with('error', $th->getMessage());
         }
     }
@@ -242,7 +241,7 @@ class CaseListController extends Controller
                 DB::commit();
             } catch (Exception $err) {
                 DB::rollBack();
-                dd($err->getMessage());
+                return back()->with('error', $err->getMessage());
             }
         }
         try {
@@ -281,7 +280,6 @@ class CaseListController extends Controller
             DB::commit();
             return redirect()->route('case-list.index')->with('success', 'Case list has been updated');
         } catch (Exception $th) {
-            dd($th);
             DB::rollBack();
             return back()->with('error', $th->getMessage());
         }

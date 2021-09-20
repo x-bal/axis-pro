@@ -2,6 +2,18 @@
 
 @section('content')
 <div class="row">
+    @if (count($errors) > 0)
+    <div class="col-md-12">
+        <div class="alert alert-danger">
+            <h5 class="text-center">input validation error</h5>
+            <ol>
+                @foreach ($errors->all() as $error)
+                <li><strong> {{ $error }} </strong></li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
+    @endif
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -16,7 +28,7 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
                         <a href="{{ route('invoice.export') }}" class="btn btn-success">Excel</a>
                     </div>
-                    
+
                     @endcan
                 </div>
 
@@ -80,7 +92,7 @@
                                     {{-- <option selected disabled>-- Select Case --</option>
                                     @foreach($caselist as $data)
                                         <option value="{{ $data->id }}">{{ $data->file_no }}</option>
-                                        @endforeach --}}
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -88,14 +100,14 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="claim_amount">Claim Amount</label>
-                                <input type="text" id="claim_amount" class="form-control" readonly>
+                                <input type="text" required id="claim_amount" class="form-control" readonly>
                                 <span class="badge badge-info text-light" id="claim_amount_badge"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="adjusted">Adjusted</label>
-                                <input type="text" id="adjusted" class="form-control" readonly>
+                                <input type="text" required id="adjusted" class="form-control" readonly>
                                 <span class="badge badge-success" id="ForAdjusted"></span>
                             </div>
                         </div>
@@ -105,27 +117,27 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="fee_based">Fee Based</label>
-                                <input type="text" id="fee_based" class="form-control" readonly>
+                                <input type="text" required id="fee_based" name="fee_based" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Expense</label>
-                                <input type="text" id="expense" class="form-control" readonly>
+                                <input type="text" required id="expense" class="form-control" readonly>
                                 <span class="badge badge-info text-light" id="expense_badge"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">PPN</label>
-                                <input type="text" id="share" class="form-control" readonly>
+                                <input type="text" required id="share" class="form-control" readonly>
                                 <span class="badge badge-primary" id="ForPercent"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Total</label>
-                                <input type="text" id="total" class="form-control" name="total" readonly>
+                                <input type="text" required id="total" class="form-control" name="total" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -185,8 +197,7 @@
             cache: true
         }
     });
-    async function GetTheCaseList()
-    {
+    async function GetTheCaseList() {
         let resource = await fetch('/api/autocomplete').then(data => data.json())
         return resource
     }
@@ -288,11 +299,15 @@
             })
         } catch (err) {
             console.info(err)
-            alert('Data Masih Kosong' + err)
+            iziToast.error({
+                title: 'Error',
+                message: `${err}` ,
+                position: 'topRight',
+            });
         }
     }
 
-    function FindTheInsurance(id) { 
+    function FindTheInsurance(id) {
         return fetch(`/api/insurance/${id}`)
             .then(data => {
                 if (!data.ok) {
