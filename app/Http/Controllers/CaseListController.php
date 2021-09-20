@@ -54,21 +54,24 @@ class CaseListController extends Controller
 
                     return $btn;
                 })
-                ->filter(function ($instance) use ($request) {
-                    if ($request->get('status') != 'All') {
-                        $instance->where('file_status_id', $request->get('status'));
-                    }
-                    // if (!empty($request->get('search'))) {
-                    //     $row->where(function ($w) use ($request) {
-                    //         $search = $request->get('search');
-                    //         $w->orWhere('name', 'LIKE', "%$search%")
-                    //             ->orWhere('email', 'LIKE', "%$search%");
-                    //     });
-                    // }
-                })
+                // ->filter(function ($instance) use ($request) {
+                //     if ($request->get('status') == '1' || $request->get('status') == '2') {
+                //         $instance->where('file_status_id', $request->get('status'));
+                //     }
+                //     // if (!empty($request->get('search'))) {
+                //     //     $row->where(function ($w) use ($request) {
+                //     //         $search = $request->get('search');
+                //     //         $w->orWhere('name', 'LIKE', "%$search%")
+                //     //             ->orWhere('email', 'LIKE', "%$search%");
+                //     //     });
+                //     // }
+                // })
                 ->rawColumns(['action', 'fileno'])
                 ->make(true);
         }
+
+
+
 
         $status = FileStatus::get();
 

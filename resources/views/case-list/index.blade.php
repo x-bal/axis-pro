@@ -8,6 +8,7 @@
         text-transform: uppercase;
     }
 </style>
+
 <div class="row justify-content-center">
     @if (session('status'))
     <div class="alert alert-success" role="alert">
@@ -102,11 +103,10 @@
         processing: true,
         serverSide: true,
         ajax: "{{ route('case-list.index') }}",
-        data: {
-            from: from,
-            to: to,
-            status: status,
-        },
+        // data: function(d) {
+        //     // d.status = $('#status').val()
+        //     // d.search = $('input[type="search"]').val()
+        // },
         columns: [{
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex'
