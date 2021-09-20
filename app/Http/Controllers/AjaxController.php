@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
 use App\Models\CaseList;
 use App\Models\Client;
 use App\Models\FeeBased;
@@ -9,9 +10,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AjaxController extends Controller
 {
+    public function invoiceExport()
+    {
+        return Excel::download(new InvoiceExport(), 'InvoiceExport.xlsx');
+    }
     public function TheAutoCompleteFunc(Request $request)
     {
         $data = [];
