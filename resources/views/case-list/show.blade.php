@@ -29,17 +29,17 @@
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-1' ? 'active bg-primary text-white' : '' }}" href="?page=nav-report-1">Report 1</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-2' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->ia_status == 1 ? '?page=nav-report-2' : '#' }}">Report 2</a>
+                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-2' ? 'active bg-primary text-white' : '' }} {{ $caseList->ia_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->ia_status == 1 ? '?page=nav-report-2' : '#' }}">Report 2</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-3' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pr_status == 1 ? '?page=nav-report-3' : '#' }}">Report 3</a>
+                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-3' ? 'active bg-primary text-white' : '' }} {{ $caseList->pr_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pr_status == 1 ? '?page=nav-report-3' : '#' }}">Report 3</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-4' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '?page=nav-report-4' : '#' }}">Report 4</a>
+                        <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-4' ? 'active bg-primary text-white' : '' }} {{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '?page=nav-report-4' : '#' }}">Report 4</a>
                     </li>
                     @if($caseList->ir_status == 1)
                     <li class="nav-item">
-                        <a class="nav-link nav-tab r5 {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
+                        <a class="nav-link nav-tab r5 {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }} {{ $caseList->pa_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
                     </li>
                     @endif
                 </ul>
@@ -459,7 +459,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="number" name="ia_amount" class="form-control" value="{{ $caseList->ia_amount ?? '' }}">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="ia_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->ia_amount ?? '' }}">
+                                        </div>
                                     </td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
@@ -575,8 +580,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="number" name="pr_amount" class="form-control" value="{{ $caseList->pr_amount ?? '' }}">
-
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="pr_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->pr_amount ?? '' }}">
+                                        </div>
                                         @error('pr_amount')
                                         <small class="text-danger"> {{ $message }}</small>
                                         @enderror
@@ -695,13 +704,24 @@
                                 <tr>
                                     <td>
                                         @if($caseList->ir_status == 1)
-                                        <input type="number" name="ir_st_amount" class="form-control" value="{{ $caseList->ir_st_amount ?? '' }}">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="ir_st_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->ir_st_amount ?? '' }}">
+                                        </div>
 
                                         @error('ir_st_amount')
                                         <small class="text-danger"> {{ $message }}</small>
                                         @enderror
                                         @else
-                                        <input type="number" name="pa_amount" class="form-control" value="{{ $caseList->pa_amount ?? '' }}">
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="pa_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->pa_amount ?? '' }}">
+                                        </div>
 
                                         @error('pa_amount')
                                         <small class="text-danger"> {{ $message }}</small>
@@ -835,13 +855,23 @@
                                 <tr>
                                     <td>
                                         @if($caseList->ir_status == 1)
-                                        <input type="number" name="pa_amount" class="form-control" value="{{ $caseList->pa_amount ?? '' }}">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="pa_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->pa_amount ?? '' }}">
+                                        </div>
 
                                         @error('pa_amount')
                                         <small class="text-danger"> {{ $message }}</small>
                                         @enderror
                                         @else
-                                        <input type="number" name="fr_amount" class="form-control" value="{{ $caseList->fr_amount ?? '' }}">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="fr_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->fr_amount ?? '' }}">
+                                        </div>
 
                                         @error('fr_amount')
                                         <small class="text-danger"> {{ $message }}</small>
@@ -957,7 +987,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="number" name="fr_amount" class="form-control" value="{{ $caseList->fr_amount ?? '' }}">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{ $caseList->currency == 'RP' ? 'Rp' : '$' }}</span>
+                                            </div>
+                                            <input type="number" name="fr_amount" class="form-control" aria-describedby="basic-addon1" value="{{ $caseList->fr_amount ?? '' }}">
+                                        </div>
 
                                         @error('fr_amount')
                                         <small class="text-danger"> {{ $message }}</small>
