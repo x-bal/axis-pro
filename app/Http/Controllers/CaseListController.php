@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class CaseListController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
             $data = CaseList::with('member', 'insurance', 'adjuster', 'broker', 'incident', 'policy', 'status')->get();
+
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->editColumn('fileno', function ($row) {
@@ -53,11 +54,25 @@ class CaseListController extends Controller
 
                     return $btn;
                 })
+                ->filter(function ($instance) use ($request) {
+                    if ($request->get('status') != 'All') {
+                        $instance->where('file_status_id', $request->get('status'));
+                    }
+                    // if (!empty($request->get('search'))) {
+                    //     $row->where(function ($w) use ($request) {
+                    //         $search = $request->get('search');
+                    //         $w->orWhere('name', 'LIKE', "%$search%")
+                    //             ->orWhere('email', 'LIKE', "%$search%");
+                    //     });
+                    // }
+                })
                 ->rawColumns(['action', 'fileno'])
                 ->make(true);
         }
 
-        return view('case-list.index');
+        $status = FileStatus::get();
+
+        return view('case-list.index', compact('status'));
     }
 
     public function create()
@@ -166,28 +181,54 @@ class CaseListController extends Controller
             $currency = Currency::get()->firstOrFail();
             try {
                 DB::beginTransaction();
+                $caseList =  CaseList::where('id', $caseList->id)->first();
                 if ($request->currency == 'RP') {
-                    CaseList::where('id', $caseList->id)->update([
-                        'ia_amount' => strval(round($caseList->ia_amount * $currency->kurs)),
-                        'pr_amount' => strval(round($caseList->pr_amount * $currency->kurs)),
-                        'pa_amount' => strval(round($caseList->pa_amount * $currency->kurs)),
-                        'fr_amount' => strval(round($caseList->fr_amount * $currency->kurs)),
-                        'claim_amount' => strval(round($caseList->claim_amount * $currency->kurs))
-                    ]);
+                    if ($caseList->ir_status == 1) {
+                        $caseList->update([
+                            'ia_amount' => strval(round($caseList->ia_amount * $currency->kurs)),
+                            'pr_amount' => strval(round($caseList->pr_amount * $currency->kurs)),
+                            'ir_st_amount' => strval(round($caseList->ir_st_amount * $currency->kurs)),
+                            'pa_amount' => strval(round($caseList->pa_amount * $currency->kurs)),
+                            'fr_amount' => strval(round($caseList->fr_amount * $currency->kurs)),
+                            'claim_amount' => strval(round($caseList->claim_amount * $currency->kurs))
+                        ]);
+                    } else {
+                        $caseList->update([
+                            'ia_amount' => strval(round($caseList->ia_amount * $currency->kurs)),
+                            'pr_amount' => strval(round($caseList->pr_amount * $currency->kurs)),
+                            'pa_amount' => strval(round($caseList->pa_amount * $currency->kurs)),
+                            'fr_amount' => strval(round($caseList->fr_amount * $currency->kurs)),
+                            'claim_amount' => strval(round($caseList->claim_amount * $currency->kurs))
+                        ]);
+                    }
+
                     foreach ($caseList->expense as $data) {
                         Expense::where('case_list_id', $caseList->id)->update([
                             'amount' => strval(round($data->amount * $currency->kurs))
                         ]);
                     }
                 }
+
                 if ($request->currency == 'USD') {
-                    CaseList::where('id', $caseList->id)->update([
-                        'ia_amount' => strval(round($caseList->ia_amount / $currency->kurs, 2)),
-                        'pr_amount' => strval(round($caseList->pr_amount / $currency->kurs, 2)),
-                        'pa_amount' => strval(round($caseList->pa_amount / $currency->kurs, 2)),
-                        'fr_amount' => strval(round($caseList->fr_amount / $currency->kurs, 2)),
-                        'claim_amount' => strval(round($caseList->claim_amount / $currency->kurs, 2))
-                    ]);
+                    if ($caseList->ir_status == 1) {
+                        $caseList->update([
+                            'ia_amount' => strval(round($caseList->ia_amount / $currency->kurs, 2)),
+                            'pr_amount' => strval(round($caseList->pr_amount / $currency->kurs, 2)),
+                            'ir_st_amount' => strval(round($caseList->ir_st_amount / $currency->kurs, 2)),
+                            'pa_amount' => strval(round($caseList->pa_amount / $currency->kurs, 2)),
+                            'fr_amount' => strval(round($caseList->fr_amount / $currency->kurs, 2)),
+                            'claim_amount' => strval(round($caseList->claim_amount / $currency->kurs, 2))
+                        ]);
+                    } else {
+                        $caseList->update([
+                            'ia_amount' => strval(round($caseList->ia_amount / $currency->kurs, 2)),
+                            'pr_amount' => strval(round($caseList->pr_amount / $currency->kurs, 2)),
+                            'pa_amount' => strval(round($caseList->pa_amount / $currency->kurs, 2)),
+                            'fr_amount' => strval(round($caseList->fr_amount / $currency->kurs, 2)),
+                            'claim_amount' => strval(round($caseList->claim_amount / $currency->kurs, 2))
+                        ]);
+                    }
+
                     foreach ($caseList->expense as $data) {
                         Expense::where('case_list_id', $caseList->id)->update([
                             'amount' => strval(round($data->amount / $currency->kurs, 2))

@@ -26,6 +26,40 @@
                 </div>
                 <div class="table-responsive">
 
+                    <form action="" method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="date" name="" id="from" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-0">
+                                &&
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="date" name="" id="to" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="" id="status" class="form-control">
+                                        <option value="All">All</option>
+                                        @foreach($status as $stt)
+                                        <option value="{{ $stt->id }}">{{ $stt->nama_status }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <!-- <button type="submit" class="btn btn-primary">Laporan</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                     <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                         <thead style="font-weight: bold;">
                             <tr>
@@ -68,6 +102,11 @@
         processing: true,
         serverSide: true,
         ajax: "{{ route('case-list.index') }}",
+        data: {
+            from: from,
+            to: to,
+            status: status,
+        },
         columns: [{
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex'
@@ -120,10 +159,6 @@
                 data: 'status',
                 name: 'status'
             },
-            // {
-            //     data: 'adjuster',
-            //     name: 'adjuster'
-            // },
             {
                 data: 'action',
                 name: 'action',
@@ -147,5 +182,14 @@
         orderable: true,
         searchable: true
     });
+
+
+
+    $(document).ready(function() {
+        $("#status").on('change', function() {
+            table.draw()
+        })
+
+    })
 </script>
 @stop
