@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ReportSatuCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ReportSatuCommand::class
+        Commands\CronSatu::class,
+        Commands\CronDua::class,
+        Commands\CronTiga::class,
+        Commands\CronEmpat::class,
+        Commands\CronLima::class,
     ];
 
     /**
@@ -25,7 +28,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('reportsatu:limit')->everyMinute();
+        $schedule->command('cron:satu')->everyMinute();
+        $schedule->command('cron:dua')->everyMinute();
+        $schedule->command('cron:tiga')->everyMinute();
+        $schedule->command('cron:empat')->everyMinute();
+        $schedule->command('cron:lima')->everyMinute();
     }
 
     /**

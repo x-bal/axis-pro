@@ -7,14 +7,14 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
-class ReportSatuCommand extends Command
+class CronDua extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'reportsatu:limit';
+    protected $signature = 'cron:dua';
 
     /**
      * The console command description.
@@ -43,18 +43,18 @@ class ReportSatuCommand extends Command
         $caseLists = CaseList::get();
 
         foreach ($caseLists as $case) {
-            $limit = Carbon::parse($case->ia_limit)->format('Ymd');
+            $limit = Carbon::parse($case->pr_limit)->format('Ymd');
             $date = Carbon::now()->format('Ymd');
 
-            if ($case->ia_status == 0) {
+            if ($case->pr_status == 0) {
                 if ($date > $limit) {
-                    Mail::raw("This is automatically generated Reminder", function ($message) use ($case) {
-                        $message->from('axis-pro@gmail.com');
+                    Mail::raw("Your time has been exceeded from limit, please upload the report.", function ($message) use ($case) {
+                        // $message->from('axis-pro@gmail.com');
                         $message->to($case->adjuster->email)->subject('Reminder');
                     });
+                    $case->update(['pr_limit' => Carbon::parse($limit)->addDay(14)->format('Y-m-d')]);
                 }
             }
         }
-        $this->info('Reminder has been send successfully');
     }
 }
