@@ -72,6 +72,7 @@ class ReportLimaController extends Controller
             'fr_status' => 1,
             'fr_date' => Carbon::now(),
             'now_update' => Carbon::now(),
+            'file_status_id' => 5
         ]);
 
         return back()->with('success', 'Report lima has been uploaded');

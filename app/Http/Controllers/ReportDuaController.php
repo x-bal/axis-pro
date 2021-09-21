@@ -73,6 +73,7 @@ class ReportDuaController extends Controller
             'pr_date' => Carbon::now(),
             'now_update' => Carbon::now(),
             'ir_status' => $request->ir_status,
+            'file_status_id' => 4
         ]);
 
         return back()->with('success', 'Report dua has been uploaded');

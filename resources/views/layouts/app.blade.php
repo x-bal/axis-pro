@@ -18,7 +18,15 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    @auth
+    @if(auth()->user()->hasRole('admin'))
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    @else
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @endif
+    @else
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    @endauth
 
     <link rel="stylesheet" href="{{ asset('/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/jquery.dataTables.min.css') }}">
@@ -118,17 +126,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
 
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
                         @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link active dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

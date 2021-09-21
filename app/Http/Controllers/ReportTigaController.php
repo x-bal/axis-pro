@@ -72,6 +72,7 @@ class ReportTigaController extends Controller
                 'ir_st_status' => 1,
                 'ir_st_date' => Carbon::now(),
                 'now_update' => Carbon::now(),
+                'file_status_id' => 2
             ]);
         } else {
             $caseList->update([
@@ -79,6 +80,7 @@ class ReportTigaController extends Controller
                 'pa_status' => 1,
                 'pa_date' => Carbon::now(),
                 'now_update' => Carbon::now(),
+                'file_status_id' => 2
             ]);
         }
 

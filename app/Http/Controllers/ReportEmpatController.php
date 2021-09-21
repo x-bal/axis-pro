@@ -72,6 +72,7 @@ class ReportEmpatController extends Controller
                 'pa_status' => 1,
                 'pa_date' => Carbon::now(),
                 'now_update' => Carbon::now(),
+                'file_status_id' => 2
             ]);
         } else {
             $caseList->update([
@@ -80,6 +81,7 @@ class ReportEmpatController extends Controller
                 'fr_status' => 1,
                 'fr_date' => Carbon::now(),
                 'now_update' => Carbon::now(),
+                'file_status_id' => 5
             ]);
         }
 

@@ -71,6 +71,7 @@ class ReportSatuController extends Controller
             'ia_date' => Carbon::now(),
             'now_update' => Carbon::now(),
             'pr_date' => Carbon::now()->addDay(7),
+            'file_status_id' => 3
         ]);
 
         return back()->with('success', 'Report satu has been uploaded');
