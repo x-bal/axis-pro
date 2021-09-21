@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CaseListExport;
 use App\Models\{CaseList, User, Broker, Incident, Policy, Client, Currency, Expense, FileStatus, MemberInsurance,};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CaseListController extends Controller
 {
@@ -327,5 +329,14 @@ class CaseListController extends Controller
             'message' => $caseList->ir_status == 1 ? 'Interim report has been used' : 'Interim report has been removed',
             'case_list' => $caseList
         ], 200);
+    }
+    public function excel(Request $request)
+    {
+        $this->validate($request,[
+            'from' => 'required',
+            'to' => 'required',
+            'status' => 'required'
+        ]);
+        return Excel::download(new CaseListExport($request->except(['_token'])), 'case list report.xlsx');
     }
 }

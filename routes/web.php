@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/case-list/status', [CaseListController::class, 'status'])->name('caselist.status');
     Route::post('/case-list/ir-status', [CaseListController::class, 'irstatus']);
     Route::post('/case-list/getcase', [CaseListController::class, 'getcase']);
+    Route::post('/case-list/excel', [CaseListController::class, 'excel'])->name('caselist.excel');
     Route::resource('/case-list', CaseListController::class);
     Route::resource('/cause-of-loss', IncidentController::class);
     Route::resource('/type-of-business', PolicyController::class);

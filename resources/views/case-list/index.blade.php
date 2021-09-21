@@ -29,24 +29,32 @@
                 </div>
                 <div class="table-responsive">
 
-                    <!-- <form action="" method="post">
+                    <form action="{{ route('caselist.excel') }}" method="post">
+                        @csrf
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <input type="date" name="" id="from" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-0">
-                                &&
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <input type="date" name="" id="to" class="form-control">
+                                    <input type="date" name="from" id="from" class="form-control @error('from') is-invalid @enderror">
+                                    @error('from')
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select name="" id="status" class="form-control">
+                                    <input type="date" name="to" id="to" class="form-control @error('to') is-invalid @enderror">
+                                    @error('to')
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="status" id="status" class="form-control">
                                         <option value="All">All</option>
                                         @foreach($status as $stt)
                                         <option value="{{ $stt->id }}">{{ $stt->nama_status }}</option>
@@ -61,7 +69,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form> -->
+                    </form>
 
                     <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                         <thead style="font-weight: bold;">
