@@ -14,4 +14,8 @@ class Policy extends Model
     {
         return $this->belongsTo(Policy::class, 'policy_id');
     }
+    public function caselist()
+    {
+        return $this->hasMany(CaseList::class, 'policy_id');
+    }
 }

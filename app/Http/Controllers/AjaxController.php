@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\FeeBased;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
+use App\Models\Policy;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -105,5 +106,21 @@ class AjaxController extends Controller
         } catch (Exception $err) {
             return response()->json($err->getMessage());
         }
+    }
+    public function ChartCaseList()
+    {
+        
+        $caselist = CaseList::with('policy')->get();
+        $policy = Policy::get();
+        $response = [
+            'caselist' => $caselist,
+            'policy' => $policy
+        ];
+        return response()->json($response);
+    }
+    public function count($id)
+    {
+        $policy = Policy::find($id)->caselist->count();
+        return $policy;
     }
 }
