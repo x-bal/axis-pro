@@ -67,22 +67,37 @@ class ReportEmpatController extends Controller
         $caseList = CaseList::find($request->case_list_id);
 
         if ($caseList->ir_status == 1) {
-            $caseList->update([
-                'pa_amount' => $request->pa_amount,
-                'pa_status' => 1,
-                'pa_date' => Carbon::now(),
-                'now_update' => Carbon::now(),
-                'file_status_id' => 2
-            ]);
+            if ($caseList->pa_status == 0) {
+                $caseList->update([
+                    'pa_amount' => $request->pa_amount,
+                    'pa_status' => 1,
+                    'fr_limit' => Carbon::now()->addDay(7),
+                    'pa_date' => Carbon::now(),
+                    'now_update' => Carbon::now(),
+                    'file_status_id' => 2
+                ]);
+            } else {
+                $caseList->update([
+                    'pa_amount' => $request->pa_amount,
+                    'now_update' => Carbon::now(),
+                ]);
+            }
         } else {
-            $caseList->update([
-                'fr_amount' => $request->fr_amount,
-                'claim_amount' => $request->fr_amount,
-                'fr_status' => 1,
-                'fr_date' => Carbon::now(),
-                'now_update' => Carbon::now(),
-                'file_status_id' => 5
-            ]);
+            if ($caseList->fr_status == 0) {
+                $caseList->update([
+                    'fr_amount' => $request->fr_amount,
+                    'claim_amount' => $request->fr_amount,
+                    'fr_status' => 1,
+                    'fr_date' => Carbon::now(),
+                    'now_update' => Carbon::now(),
+                    'file_status_id' => 5
+                ]);
+            } else {
+                $caseList->update([
+                    'fr_amount' => $request->fr_amount,
+                    'now_update' => Carbon::now(),
+                ]);
+            }
         }
 
 

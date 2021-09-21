@@ -65,14 +65,21 @@ class ReportSatuController extends Controller
         }
 
         $caseList = CaseList::find($request->case_list_id);
-        $caseList->update([
-            'ia_amount' => $request->ia_amount,
-            'ia_status' => 1,
-            'ia_date' => Carbon::now(),
-            'now_update' => Carbon::now(),
-            'pr_date' => Carbon::now()->addDay(7),
-            'file_status_id' => 3
-        ]);
+        if ($caseList->ia_status == 0) {
+            $caseList->update([
+                'ia_amount' => $request->ia_amount,
+                'ia_status' => 1,
+                'ia_date' => Carbon::now(),
+                'now_update' => Carbon::now(),
+                'pr_limit' => Carbon::now()->addDay(14),
+                'file_status_id' => 3
+            ]);
+        } else {
+            $caseList->update([
+                'ia_amount' => $request->ia_amount,
+            ]);
+        }
+
 
         return back()->with('success', 'Report satu has been uploaded');
     }
