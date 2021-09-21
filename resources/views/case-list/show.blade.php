@@ -28,15 +28,21 @@
                     <li class="nav-item">
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-1' ? 'active bg-primary text-white' : '' }}" href="?page=nav-report-1">Report 1</a>
                     </li>
+                    @if($caseList->ia_status == 1)
                     <li class="nav-item">
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-2' ? 'active bg-primary text-white' : '' }} {{ $caseList->ia_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->ia_status == 1 ? '?page=nav-report-2' : '#' }}">Report 2</a>
                     </li>
+                    @endif
+                    @if($caseList->pr_status == 1)
                     <li class="nav-item">
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-3' ? 'active bg-primary text-white' : '' }} {{ $caseList->pr_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pr_status == 1 ? '?page=nav-report-3' : '#' }}">Report 3</a>
                     </li>
+                    @endif
+                    @if($caseList->pa_status == 1 || $caseList->ir_st_status == 1)
                     <li class="nav-item">
                         <a class="nav-link nav-tab {{ request()->get('page') == 'nav-report-4' ? 'active bg-primary text-white' : '' }} {{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pa_status == 1 || $caseList->ir_st_status == 1 ? '?page=nav-report-4' : '#' }}">Report 4</a>
                     </li>
+                    @endif
                     @if($caseList->ir_status == 1)
                     <li class="nav-item">
                         <a class="nav-link nav-tab r5 {{ request()->get('page') == 'nav-report-5' ? 'active bg-primary text-white' : '' }} {{ $caseList->pa_status == 1 ? '' : 'disabled' }}" href="{{ $caseList->pa_status == 1 ? '?page=nav-report-5' : '#' }}">Report 5</a>
@@ -56,10 +62,8 @@
                                     <td width="12%">CURRENT STATUS</td>
                                     <td width="2%">:</td>
                                     <td width="31%">
-                                        <select name="status" class="form-control status">
-                                            @foreach($status as $stt)
-                                            <option {{ $stt->id == $caseList->file_status_id ? 'selected' : '' }} value="{{ $stt->id }}">{{ $stt->nama_status }}</option>
-                                            @endforeach
+                                        <select name="status" class="form-control" disabled>
+                                            <option value="{{ $caseList->status->nama_status }}">{{ $caseList->status->nama_status }}</option>
                                         </select>
                                     </td>
                                     <td width="15%">INSURED</td>
@@ -1146,27 +1150,27 @@
         });
 
 
-        $(".status").on('change', function() {
-            let id = "{{ $caseList->id }}";
-            let status = $(this).val();
+        // $(".status").on('change', function() {
+        //     let id = "{{ $caseList->id }}";
+        //     let status = $(this).val();
 
-            $.ajax({
-                method: 'POST',
-                type: 'POST',
-                url: '/case-list/status',
-                data: {
-                    id: id,
-                    status: status,
-                },
-                success: function(result) {
-                    iziToast.success({
-                        title: 'Success',
-                        message: result.message,
-                        position: 'topRight',
-                    });
-                }
-            })
-        })
+        //     $.ajax({
+        //         method: 'POST',
+        //         type: 'POST',
+        //         url: '/case-list/status',
+        //         data: {
+        //             id: id,
+        //             status: status,
+        //         },
+        //         success: function(result) {
+        //             iziToast.success({
+        //                 title: 'Success',
+        //                 message: result.message,
+        //                 position: 'topRight',
+        //             });
+        //         }
+        //     })
+        // })
     })
 </script>
 @stop

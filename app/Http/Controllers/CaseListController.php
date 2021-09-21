@@ -7,13 +7,21 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CaseListController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::allows(abort_unless('case-list-access', 403));
+
+        if (auth()->user()->hasRole('admin')) {
+            $data = CaseList::all();
+        } else {
+            $data = CaseList::where('adjuster_id', auth()->user()->id)->get();
+        }
+
         if (request()->ajax()) {
-            $data = CaseList::with('member', 'insurance', 'adjuster', 'broker', 'incident', 'policy', 'status')->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -54,21 +62,17 @@ class CaseListController extends Controller
 
                     return $btn;
                 })
-                ->filter(function ($instance) use ($request) {
-                    if ($request->get('status') != 'All') {
-                        $instance->where('file_status_id', $request->get('status'));
-                    }
-                    // if (!empty($request->get('search'))) {
-                    //     $row->where(function ($w) use ($request) {
-                    //         $search = $request->get('search');
-                    //         $w->orWhere('name', 'LIKE', "%$search%")
-                    //             ->orWhere('email', 'LIKE', "%$search%");
-                    //     });
-                    // }
-                })
+                // ->filter(function ($instance) {
+                //     if (request()->has('status')) {
+                //         $instance->where('file_status_id', request('status'));
+                //     }
+                // })
                 ->rawColumns(['action', 'fileno'])
                 ->make(true);
         }
+
+
+
 
         $status = FileStatus::get();
 
@@ -77,6 +81,8 @@ class CaseListController extends Controller
 
     public function create()
     {
+        Gate::allows(abort_unless('case-list-create', 403));
+
         return view('case-list.create', [
             'caseList' => new Caselist(),
             'client' => Client::get(),
@@ -90,6 +96,8 @@ class CaseListController extends Controller
 
     public function store(Request $request)
     {
+        Gate::allows(abort_unless('case-list-create', 403));
+
         $this->validate($request, [
             'file_no' => 'required',
             'risk_location' => 'required',
@@ -152,6 +160,8 @@ class CaseListController extends Controller
 
     public function show(CaseList $caseList)
     {
+        Gate::allows(abort_unless('case-list-show', 403));
+
         $status = FileStatus::get();
         return view('case-list.show', compact('caseList', 'status'));
     }
@@ -163,6 +173,8 @@ class CaseListController extends Controller
 
     public function edit(CaseList $caseList)
     {
+        Gate::allows(abort_unless('case-list-edit', 403));
+
         return view('case-list.edit', [
             'caseList' => $caseList,
             'client' => Client::get(),
@@ -175,6 +187,7 @@ class CaseListController extends Controller
     }
     public function update(Request $request, CaseList $caseList)
     {
+        Gate::allows(abort_unless('case-list-edit', 403));
 
         if ($request->currency != $caseList->currency) {
 

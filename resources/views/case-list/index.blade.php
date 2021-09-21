@@ -8,6 +8,7 @@
         text-transform: uppercase;
     }
 </style>
+
 <div class="row justify-content-center">
     @if (session('status'))
     <div class="alert alert-success" role="alert">
@@ -22,11 +23,13 @@
                     <div>
                         {{ __('Case List') }}
                     </div>
-                    <a href="{{ route('case-list.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
+                    @can('case-list-create')
+                    <a href="{{ route('case-list.create') }}" class="btn btn-admin"><i class="fas fa-pen"></i> Create</a>
+                    @endif
                 </div>
                 <div class="table-responsive">
 
-                    <form action="" method="post">
+                    <!-- <form action="" method="post">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -54,11 +57,11 @@
 
                             <div class="col-md-1">
                                 <div class="form-group">
-                                    <!-- <button type="submit" class="btn btn-primary">Laporan</button> -->
+                                    <button type="submit" class="btn btn-primary">Laporan</button>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                         <thead style="font-weight: bold;">
@@ -76,7 +79,9 @@
                                 <!-- <td rowspan="2" class="border">Claim of Amount</td>
                             <td rowspan="2" class="border">Instruction Date</td> -->
                                 <td rowspan="2" class="border">Status</td>
+                                @can('case-list-edit')
                                 <td rowspan="2" class="border">Action</td>
+                                @endcan
                             </tr>
                             <tr>
                                 <td class="border">Name</td>
@@ -101,11 +106,12 @@
     let table = new DataTable('#table', {
         processing: true,
         serverSide: true,
-        ajax: "{{ route('case-list.index') }}",
-        data: {
-            from: from,
-            to: to,
-            status: status,
+        ajax: {
+            url: "{{ route('case-list.index') }}",
+            data: function(d) {
+                d.status = $('#status').val(),
+                    d.search = $('input[type="search"]').val()
+            },
         },
         columns: [{
                 data: 'DT_RowIndex',
@@ -159,11 +165,12 @@
                 data: 'status',
                 name: 'status'
             },
-            {
+            @can('case-list-edit') {
                 data: 'action',
                 name: 'action',
 
             },
+            @endcan
 
         ],
         responsive: {

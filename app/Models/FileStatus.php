@@ -13,6 +13,6 @@ class FileStatus extends Model
 
     public function caselist()
     {
-        return $this->hasMany(CaseList::class);
+        return $this->hasMany(CaseList::class, 'file_status_id');
     }
 }
