@@ -431,7 +431,7 @@
                             <tr>
                                 <td>Date Uploaded</td>
                                 <td> : </td>
-                                <td>{{ Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y') ?? '-'}}</td>
+                                <td>{{ $caseList->ia_date != NULL ? Carbon\Carbon::parse($caseList->ia_date)->format('d/m/Y') : '-'}}</td>
                             </tr>
                         </table>
 
@@ -550,7 +550,7 @@
                             <tr>
                                 <td>Date Uploaded</td>
                                 <td> : </td>
-                                <td>{{ Carbon\Carbon::parse($caseList->pr_date)->format('d/m/Y') ?? '-'}}</td>
+                                <td>{{ $caseList->pr_date ? Carbon\Carbon::parse($caseList->pr_date)->format('d/m/Y') : '-'}}</td>
                             </tr>
                         </table>
 
@@ -687,7 +687,13 @@
                             <tr>
                                 <td>Date Uploaded</td>
                                 <td> : </td>
-                                <td>{{ $caseList->ir_status == 0 ? Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') : Carbon\Carbon::parse($caseList->ir_st_date)->format('d/m/Y')}}</td>
+                                <td>
+                                    @if($caseList->ir_status == 0)
+                                    {{ $caseList->pa_date != NULL ? Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') : '-'}}
+                                    @else
+                                    {{ $caseList->ir_st_date != NULL ? Carbon\Carbon::parse($caseList->ir_st_date)->format('d/m/Y') : '-'}}
+                                    @endif
+                                </td>
                             </tr>
                         </table>
 
@@ -834,9 +840,9 @@
                                 <td> : </td>
                                 <td>
                                     @if($caseList->ir_status == 0)
-                                    {{ Carbon\Carbon::parse($caseList->fr_date)->format('d/m/Y') ?? '-'}}
+                                    {{ $caseList->fr_date != NULL ? Carbon\Carbon::parse($caseList->fr_date)->format('d/m/Y') : '-'}}
                                     @else
-                                    {{ Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') ?? '-'}}
+                                    {{ $caseList->pa_date != NULL ? Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') : '-'}}
                                     @endif
                                 </td>
                             </tr>
@@ -970,7 +976,7 @@
                                 <td>Date Uploaded</td>
                                 <td> : </td>
                                 <td>
-                                    {{ Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') ?? '-'}}
+                                    {{ $caseList->fr_date != NULL ? Carbon\Carbon::parse($caseList->pa_date)->format('d/m/Y') : '-'}}
                                 </td>
                             </tr>
                         </table>
