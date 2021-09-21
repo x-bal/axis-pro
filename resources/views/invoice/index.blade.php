@@ -72,7 +72,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalScrollable" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle">Create Invoice</h5>
@@ -81,93 +81,95 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('invoice.store') }}" method="post" id="TheHolyForm">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="no_case">No Case</label>
-                                <br>
-                                <select name="no_case" id="no_case" class="form-control" onchange="OnSelect(this)">
-                                    {{-- <option selected disabled>-- Select Case --</option>
-                                    @foreach($caselist as $data)
-                                        <option value="{{ $data->id }}">{{ $data->file_no }}</option>
-                                    @endforeach --}}
-                                </select>
+                <div class="container-fluid">
+
+                    <form action="{{ route('invoice.store') }}" method="post" id="TheHolyForm">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="no_case">No Case</label>
+                                    <br>
+                                    <select name="no_case" id="no_case" class="form-control" onchange="OnSelect(this)">
+                                        {{-- <option selected disabled>-- Select Case --</option>
+                                            @foreach($caselist as $data)
+                                            <option value="{{ $data->id }}">{{ $data->file_no }}</option>
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="claim_amount">Claim Amount</label>
+                                    <input type="text" required id="claim_amount" class="form-control" readonly>
+                                    <span class="badge badge-info text-light" id="claim_amount_badge"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="adjusted">Adjusted</label>
+                                    <input type="text" required id="adjusted" class="form-control" readonly>
+                                    <span class="badge badge-success" id="ForAdjusted"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fee_based">Fee Based</label>
+                                    <input type="text" required id="fee_based" name="fee_based" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Expense</label>
+                                    <input type="text" required id="expense" class="form-control" readonly>
+                                    <span class="badge badge-info text-light" id="expense_badge"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">PPN</label>
+                                    <input type="text" required id="share" class="form-control" readonly>
+                                    <span class="badge badge-primary" id="ForPercent"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Total</label>
+                                    <input type="text" required id="total" class="form-control" name="total" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Date Invoice</label>
+                                    <input type="date" id="date_invoice" class="form-control" name="date_invoice">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="claim_amount">Claim Amount</label>
-                                <input type="text" required id="claim_amount" class="form-control" readonly>
-                                <span class="badge badge-info text-light" id="claim_amount_badge"></span>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead class="bg-primary text-light">
+                                        <tr>
+                                            <th>Member</th>
+                                            <th>Member Share</th>
+                                            <th>No Invoice</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="forLoop">
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="adjusted">Adjusted</label>
-                                <input type="text" required id="adjusted" class="form-control" readonly>
-                                <span class="badge badge-success" id="ForAdjusted"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="fee_based">Fee Based</label>
-                                <input type="text" required id="fee_based" name="fee_based" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Expense</label>
-                                <input type="text" required id="expense" class="form-control" readonly>
-                                <span class="badge badge-info text-light" id="expense_badge"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">PPN</label>
-                                <input type="text" required id="share" class="form-control" readonly>
-                                <span class="badge badge-primary" id="ForPercent"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Total</label>
-                                <input type="text" required id="total" class="form-control" name="total" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Date Invoice</label>
-                                <input type="date" id="date_invoice" class="form-control" name="date_invoice">
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead class="bg-primary text-light">
-                                    <tr>
-                                        <th>Member</th>
-                                        <th>Member Share</th>
-                                        <th>No Invoice</th>
-                                        <th>Nominal</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="forLoop">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-
             <div class="modal-footer">
                 <button class="btn btn-danger" onclick="Currency()">Currency</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -301,7 +303,7 @@
             console.info(err)
             iziToast.error({
                 title: 'Error',
-                message: `${err}` ,
+                message: `${err}`,
                 position: 'topRight',
             });
         }
