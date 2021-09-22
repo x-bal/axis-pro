@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\CronSatu::class,
+        Commands\CronDua::class,
+        Commands\CronTiga::class,
+        Commands\CronEmpat::class,
+        Commands\CronLima::class,
     ];
 
     /**
@@ -24,7 +28,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('cron:satu')->everyMinute();
+        $schedule->command('cron:dua')->everyMinute();
+        $schedule->command('cron:tiga')->everyMinute();
+        $schedule->command('cron:empat')->everyMinute();
+        $schedule->command('cron:lima')->everyMinute();
     }
 
     /**
@@ -34,7 +42,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

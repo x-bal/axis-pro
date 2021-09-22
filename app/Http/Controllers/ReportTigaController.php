@@ -67,21 +67,35 @@ class ReportTigaController extends Controller
         $caseList = CaseList::find($request->case_list_id);
 
         if ($caseList->ir_status == 1) {
-            $caseList->update([
-                'ir_st_amount' => $request->ir_st_amount,
-                'ir_st_status' => 1,
-                'ir_st_date' => Carbon::now(),
-                'now_update' => Carbon::now(),
-                'file_status_id' => 2
-            ]);
+            if ($caseList->ir_st_status == 0) {
+                $caseList->update([
+                    'ir_st_amount' => $request->ir_st_amount,
+                    'ir_st_status' => 1,
+                    'ir_st_date' => Carbon::now(),
+                    'pa_limit' => Carbon::now()->addDay(14),
+                    'now_update' => Carbon::now(),
+                ]);
+            } else {
+                $caseList->update([
+                    'ir_st_amount' => $request->ir_st_amount,
+                    'now_update' => Carbon::now(),
+                ]);
+            }
         } else {
-            $caseList->update([
-                'pa_amount' => $request->pa_amount,
-                'pa_status' => 1,
-                'pa_date' => Carbon::now(),
-                'now_update' => Carbon::now(),
-                'file_status_id' => 2
-            ]);
+            if ($caseList->pa_status == 0) {
+                $caseList->update([
+                    'pa_amount' => $request->pa_amount,
+                    'pa_status' => 1,
+                    'pa_date' => Carbon::now(),
+                    'fr_limit' => Carbon::now()->addDay(7),
+                    'now_update' => Carbon::now(),
+                ]);
+            } else {
+                $caseList->update([
+                    'pa_amount' => $request->pa_amount,
+                    'now_update' => Carbon::now(),
+                ]);
+            }
         }
 
         return back()->with('success', 'Report tiga has been uploaded');

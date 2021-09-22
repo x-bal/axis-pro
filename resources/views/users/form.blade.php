@@ -37,6 +37,18 @@
 
     <div class="col-md-4">
         <div class="form-group">
+            <label for="kode_adjuster">Kode Adjuster</label>
+            <input name="kode_adjuster" id="kode_adjuster" type="text" value="{{ $user->kode_adjuster ?? '' }}" class="form-control @error('kode_adjuster') is-invalid @enderror">
+            @error('kode_adjuster')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
             <label for="password">Password</label>
             <input name="password" id="password" type="password" value="" class="form-control @error('password') is-invalid @enderror">
             @error('password')

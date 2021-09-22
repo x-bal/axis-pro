@@ -22,7 +22,7 @@
     @if(auth()->user()->hasRole('admin'))
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
     @else
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/adjuster.css') }}" rel="stylesheet">
     @endif
     @else
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
@@ -45,7 +45,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/home') }}">
+                <a class="navbar-brand" href="{{ url('/dashboard') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -56,8 +56,8 @@
                     <!-- Left Side Of Navbar -->
                     @auth
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item {{ request()->is('home*') ? 'active' : '' }}">
-                            <a href="/home" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                        <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+                            <a href="/dashboard" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                         </li>
                         @can('insurance-access')
                         <li class="nav-item {{ request()->is('insurance*') ? 'active' : '' }}">
@@ -134,6 +134,10 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                    {{ __('Profile') }}
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}

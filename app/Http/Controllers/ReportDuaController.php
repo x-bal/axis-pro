@@ -67,14 +67,27 @@ class ReportDuaController extends Controller
         }
 
         $caseList = CaseList::find($request->case_list_id);
-        $caseList->update([
+        $update = [
             'pr_amount' => $request->pr_amount,
             'pr_status' => 1,
             'pr_date' => Carbon::now(),
             'now_update' => Carbon::now(),
             'ir_status' => $request->ir_status,
             'file_status_id' => 4
-        ]);
+        ];
+
+        if ($caseList->pr_status == 0) {
+            if ($request->ir_status == 0) {
+                $update['pa_limit'] = Carbon::now()->addDay(14);
+                $caseList->update($update);
+            } else {
+                $update['ir_st_limit'] = Carbon::now()->addDay(14);
+                $caseList->update($update);
+            }
+        } else {
+            $caseList->update(['pr_amount' => $request->pr_amount]);
+        }
+
 
         return back()->with('success', 'Report dua has been uploaded');
     }
