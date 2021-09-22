@@ -29,7 +29,7 @@
                 </div>
                 <div class="table-responsive">
 
-                    <form action="{{ route('caselist.excel') }}" method="post">
+                    <form action="{{ route('caselist.laporan') }}" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-md-3">
