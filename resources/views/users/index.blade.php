@@ -14,6 +14,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Initial</th>
                             <th>Full Name</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -24,6 +25,7 @@
                         @foreach($users as $user)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $user->kode_adjuster }}</td>
                             <td>{{ $user->nama_lengkap }}</td>
                             <td>{{ $user->email }}</td>
                             <td>

@@ -41,9 +41,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+    Route::get('/report/{rp}', [App\Http\Controllers\HomeController::class, 'report'])->name('report');
+    Route::patch('/update/{user:id}', [App\Http\Controllers\HomeController::class, 'update'])->name('profile.update');
+
     Route::post('/case-list/status', [CaseListController::class, 'status'])->name('caselist.status');
     Route::post('/case-list/ir-status', [CaseListController::class, 'irstatus']);
     Route::post('/case-list/getcase', [CaseListController::class, 'getcase']);
