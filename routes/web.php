@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/case-list/status', [CaseListController::class, 'status'])->name('caselist.status');
     Route::post('/case-list/ir-status', [CaseListController::class, 'irstatus']);
     Route::post('/case-list/getcase', [CaseListController::class, 'getcase']);
+    Route::post('/case-list/laporan', [CaseListController::class, 'laporan'])->name('caselist.laporan');
     Route::post('/case-list/excel', [CaseListController::class, 'excel'])->name('caselist.excel');
     Route::resource('/case-list', CaseListController::class);
     Route::resource('/cause-of-loss', IncidentController::class);
@@ -62,8 +63,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permission', PermissionController::class);
+    Route::post('/invoice/laporan', [InvoiceController::class, 'laporan'])->name('invoice.laporan');
+    Route::post('/invoice/excel', [InvoiceController::class, 'excel'])->name('invoice.excel');
     Route::resource('invoice', InvoiceController::class);
-
     Route::resource('expense', ExpenseController::class);
     Route::resource('file-survey', FileSurveyController::class);
     Route::resource('claim-document', ClaimDocumentController::class);

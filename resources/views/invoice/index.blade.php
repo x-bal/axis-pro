@@ -25,14 +25,44 @@
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-pen"> Create
                     </button> -->
                     <div>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Create</button>
-                        <a href="{{ route('invoice.export') }}" class="btn btn-success">Excel</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable"><i class="fas fa-pen"></i> Create</button>
                     </div>
 
                     @endcan
                 </div>
 
                 <div class="table-responsive">
+                    <form action="{{ route('invoice.laporan') }}" method="post">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="date" name="from" id="from" class="form-control @error('from') is-invalid @enderror">
+                                    @error('from')
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="date" name="to" id="to" class="form-control @error('to') is-invalid @enderror">
+                                    @error('to')
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Laporan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-striped table-bordered" id="table">
                         <thead>
                             <tr>

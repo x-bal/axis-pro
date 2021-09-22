@@ -14,9 +14,14 @@ class InvoiceExport implements FromCollection, ShouldAutoSize, WithHeadings,With
     /**
     * @return \Illuminate\Support\Collection
     */
+    protected $attr;
+    public function __construct($attr)
+    {
+        $this->attr = $attr;        
+    }
     public function collection()
     {
-        $data = Invoice::get();
+        $data = Invoice::whereBetween('date_invoice', [$this->attr['from'], $this->attr['to']])->get();
         return $data;
     }
     

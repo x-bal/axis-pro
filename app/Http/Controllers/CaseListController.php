@@ -330,6 +330,24 @@ class CaseListController extends Controller
             'case_list' => $caseList
         ], 200);
     }
+    public function laporan(Request $request)
+    {
+        $this->validate($request,[
+            'from' => 'required',
+            'to' => 'required',
+            'status' => 'required'
+        ]);
+        $case = CaseList::whereBetween('instruction_date', [$request->from, $request->to])->where('file_status_id', $request->status)->get();
+        if ($request->status == "All") {
+            $case =  CaseList::whereBetween('instruction_date', [$request->from, $request->to])->get();
+        }
+        return view('case-list.laporan', [
+            'from' => $request->from,
+            'to' => $request->to,
+            'status' => $request->status,
+            'case' => $case
+        ]);
+    }
     public function excel(Request $request)
     {
         $this->validate($request,[

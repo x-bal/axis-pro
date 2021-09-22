@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
 use App\Models\CaseList;
 use App\Models\Client;
 use App\Models\Invoice;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -94,5 +96,26 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         //
+    }
+    public function laporan(Request $request)
+    {
+        $this->validate($request, [
+            'from' => 'required',
+            'to' => 'required'
+        ]);
+        $invoice = Invoice::whereBetween('date_invoice', [$request->from, $request->to])->get();
+        return view('invoice.laporan',[
+            'from' => $request->from,
+            'to' => $request->to,
+            'invoice' => $invoice 
+        ]);
+    }
+    public function excel(Request $request)
+    {
+        $this->validate($request, [
+            'from' => 'required',
+            'to' => 'required'
+        ]);
+        return Excel::download(new InvoiceExport($request->except(['_token'])), 'Invoice Excel.xlsx');
     }
 }
