@@ -15,6 +15,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('bank_id')->nullable();
             $table->foreignId('case_list_id');
             $table->foreignId('no_invoice_id');
             $table->integer('kuantiti');
