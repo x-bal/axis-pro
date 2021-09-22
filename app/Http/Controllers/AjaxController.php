@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\FeeBased;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
+use App\Models\Invoice;
 use App\Models\Policy;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,8 +23,8 @@ class AjaxController extends Controller
     public function TheAutoCompleteFunc(Request $request)
     {
         $data = [];
-        $caseList = CaseList::where('file_no', 'like','%'.$request->q.'%')->get();
-        foreach($caseList as $row){
+        $caseList = CaseList::where('file_no', 'like', '%' . $request->q . '%')->get();
+        foreach ($caseList as $row) {
             $data[] = ['id' => $row->id, 'text' => $row->file_no];
         }
         return response()->json($data);
@@ -109,7 +110,7 @@ class AjaxController extends Controller
     }
     public function ChartCaseList()
     {
-        
+
         $caselist = CaseList::with('policy')->get();
         $policy = Policy::get();
         $response = [
@@ -122,5 +123,15 @@ class AjaxController extends Controller
     {
         $policy = Policy::find($id)->caselist->count();
         return $policy;
+    }
+    public function invoice(Request $request)
+    {
+        $attr = $request->all();
+        $response = Invoice::find($attr['id'])->update([
+            'bank_id' => $attr['bank'],
+            'status_paid' => $attr['status'],
+
+        ]);
+        return response()->json($response);
     }
 }
