@@ -33,8 +33,8 @@ class CaseListExport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
     }
     public function styles(Worksheet $sheet)
     {
-        $string = 'A1:AV1';
-        $sheet->getStyle('A1:AV1')->getFont()->setBold(true);
+        $string = 'A1:BA';
+        $sheet->getStyle('A1:BA')->getFont()->setBold(true);
         $sheet->getStyle($string)->applyFromArray([
             'borders' => [
                 'allBorders' => [
@@ -70,22 +70,27 @@ class CaseListExport implements FromCollection, ShouldAutoSize, WithHeadings, Wi
                 'survey_date',
                 'now_update',
                 'ia_date',
+                'ia_limit',
                 'ia_amount',
                 'ia_status',
                 'pr_date',
+                'pr_limit',
                 'pr_amount',
                 'pr_status',
                 'ir_status',
                 'ir_st_date',
+                'ir_st_limit',
                 'ir_st_amount',
                 'ir_st_status',
                 'ir_nd_date',
                 'ir_nd_amount',
                 'ir_nd_status',
                 'pa_date',
+                'pa_limit',
                 'pa_amount',
                 'pa_status',
                 'fr_date',
+                'fr_limit',
                 'fr_amount',
                 'fr_status',
                 'claim_amount',

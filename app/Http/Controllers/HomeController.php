@@ -59,6 +59,8 @@ class HomeController extends Controller
     public function report($report)
     {
         if ($report == 1) {
+            $title = 'Report Satu';
+
             if (auth()->user()->hasRole('admin')) {
                 $cases = CaseList::where('ia_status', 0)->get();
             } else {
@@ -67,6 +69,8 @@ class HomeController extends Controller
         }
 
         if ($report == 2) {
+            $title = 'Report Dua';
+
             if (auth()->user()->hasRole('admin')) {
                 $cases = CaseList::where('pr_status', 0)->get();
             } else {
@@ -75,6 +79,8 @@ class HomeController extends Controller
         }
 
         if ($report == 3) {
+            $title = 'Report Tiga';
+
             if (auth()->user()->hasRole('admin')) {
                 $cases = CaseList::where('pa_status', 0)->get();
             } else {
@@ -83,6 +89,8 @@ class HomeController extends Controller
         }
 
         if ($report == 4) {
+            $title = 'Report Empat';
+
             if (auth()->user()->hasRole('admin')) {
                 $cases = CaseList::where('fr_status', 0)->get();
             } else {
@@ -90,6 +98,6 @@ class HomeController extends Controller
             }
         }
 
-        return view('dashboard.report', compact('cases'));
+        return view('dashboard.report', compact('cases', 'title'));
     }
 }

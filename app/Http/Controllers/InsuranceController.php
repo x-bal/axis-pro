@@ -26,7 +26,6 @@ class InsuranceController extends Controller
 
         return view('insurance.create', [
             'client' => new Client(),
-            'bank' => Bank::get()
         ]);
     }
 
@@ -45,7 +44,6 @@ class InsuranceController extends Controller
             'ppn' => 'required',
             'type' => 'required',
             'picture' => 'required',
-            'bank_id' => 'required'
         ]);
 
         try {
@@ -73,7 +71,6 @@ class InsuranceController extends Controller
 
         return view('insurance.edit', [
             'client' => $insurance,
-            'bank' => Bank::get()
         ]);
     }
 
@@ -91,7 +88,6 @@ class InsuranceController extends Controller
             'status' => 'required',
             'ppn' => 'required',
             'type' => 'required',
-            'bank_id' => 'required'
         ]);
 
         try {

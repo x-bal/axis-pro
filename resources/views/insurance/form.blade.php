@@ -145,23 +145,3 @@
         @enderror
     </div>
 </div>
-
-<div class="form-group row">
-    <div class="col-md-2">
-        <label for="bank_id">Bank</label>
-    </div>
-
-    <div class="col-md-10">
-        <select class="form-control" required name="bank_id" id="bank_id">
-            <option disabled selected>Select Bank</option>
-            @foreach($bank as $data)
-            <option @if($client->bank_id == $data->id) selected @endif value="{{ $data->id }}">{{ $data->bank_name }}</option>
-            @endforeach
-        </select>
-        @error('type')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-        @enderror
-    </div>
-</div>
