@@ -73,8 +73,10 @@
                                 <th>No Invoice</th>
                                 <th>Tanggal Invoice</th>
                                 <th>Tanggal Jatuh Invoice</th>
+                                <th>Bank</th>
                                 <th>Amount</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,8 +89,16 @@
                                 <td>{{ $inv->no_invoice }}</td>
                                 <td>{{ $inv->date_invoice }}</td>
                                 <td>{{ $inv->due_date }}</td>
+                                <td>{{ $inv->bank->bank_name ?? 'Kosong' }}</td>
                                 <td>{{ number_format($inv->grand_total) }}</td>
-                                <td><span class="badge badge-{{ $inv->status_paid == 1 ? 'success' : 'danger' }} p-1">{{ $inv->status_paid == 1 ? 'Paid' : 'Unpaid' }}</span> </td>
+                                <td>
+                                    <span class="badge badge-{{ $inv->status_paid == 1 ? 'success' : 'danger' }} p-1">{{ $inv->status_paid == 1 ? 'Paid' : 'Unpaid' }}</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-info btn-sm" data-toggle="modal" onclick="konfirmasi(this)" data-id="{{ $inv->id }}" data-target="#KonfirmasiModal">Konfirmasi</button>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -99,7 +109,54 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="KonfirmasiModal" role="dialog" aria-labelledby="KonfirmasiModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="KonfirmasiModalTitle">Confirm Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <form action="" id="TheFormConfirm" method="post"></form>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Id</label>
+                                <input type="text" class="form-control" readonly name="id_invoice" id="id_invoice">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="Type Bank">Type Bank</label>
+                                <select class="form-control" name="bank" id="bank">
+                                    @foreach($bank as $list)
+                                    <option value="{{ $list->id }}">{{ $list->bank_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="Type Bank">Status</label>
+                                <select class="form-control" name="status_invoice" id="status_invoice">
+                                    <option value="1">Paid</option>
+                                    <option value="0">Unpaid</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="store()" data-primary>Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalScrollable" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" style="overflow: auto;" role="document">
@@ -217,6 +274,26 @@
 
 @section('footer')
 <script>
+    function konfirmasi(id)
+    {
+        $('#id_invoice').val($(id).attr('data-id'))
+    }
+    function store()
+    {
+        $.ajax({
+            url: '/api/invoice/post',
+            data: {
+                id: $('#id_invoice').val(),
+                bank: $('#bank').val(),
+                status: $('#status_invoice').val()
+            },
+            method: 'post',
+            success: function (data){
+                console.log(data)
+                location.reload()
+            }
+        })
+    }
     $(`#no_case`).select2({
         placeholder: 'Select Product',
         ajax: {

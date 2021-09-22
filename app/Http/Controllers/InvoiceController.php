@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\InvoiceExport;
+use App\Models\Bank;
 use App\Models\CaseList;
 use App\Models\Client;
 use App\Models\Invoice;
@@ -21,7 +22,8 @@ class InvoiceController extends Controller
         return view('invoice.index', [
             'invoice' => Invoice::get(),
             'member' => MemberInsurance::get(),
-            'caselist' => CaseList::get()
+            'caselist' => CaseList::get(),
+            'bank' => Bank::get()
         ]);
     }
 
@@ -65,7 +67,7 @@ class InvoiceController extends Controller
                     'no_invoice' => $request->no_invoice[$key],
                     'date_invoice' => $request->date_invoice,
                     'due_date' => Carbon::parse($request->date_invoice)->addDays(30)->format('Y-m-d'),
-                    'status_paid' => 1,
+                    'status_paid' => 0,
                     'is_active' => 1,
                     'grand_total' => $total * $data->share / 100
                 ]);
