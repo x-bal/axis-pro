@@ -61,18 +61,6 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="kurs">kurs</label>
-                                <input name="kurs" id="kurs" type="kurs" value="{{ $kurs->kurs ?? 'Kosong' }}" class="form-control @error('kurs') is-invalid @enderror">
-
-                                @error('kurs')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
 
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Update</button>

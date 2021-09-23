@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Policy;
+use Dotenv\Validator;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -133,5 +134,24 @@ class AjaxController extends Controller
 
         ]);
         return response()->json($response);
+    }
+    public function kurs(Request $request)
+    {
+        $validator = validator()->make($request->all(),[
+            'kurs' => 'required|numeric'
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->getMessageBag());
+        }
+        if (Currency::first() == null) {
+            Currency::create([
+                'kurs' => $request->kurs
+            ]);
+        } else {
+            Currency::first()->update([
+                'kurs' => $request->kurs
+            ]);
+        }
+        return response()->json($request->kurs);
     }
 }
