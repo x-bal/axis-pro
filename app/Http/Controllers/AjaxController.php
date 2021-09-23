@@ -43,10 +43,11 @@ class AjaxController extends Controller
     {
         try {
             $caselist = CaseList::find($id);
-
+            // 1
             if ($caselist->category == 1) {
                 $feebased = FeeBased::where('category_fee', 1)->get();
                 if ($caselist->currency == 'RP') {
+                    $max = FeeBased::where('category_fee', 1)->max('adjusted_idr');
                     foreach ($feebased as $data) {
                         if ($caselist->claim_amount <= $data->adjusted_idr) {
                             $array = [
@@ -57,10 +58,18 @@ class AjaxController extends Controller
                             break;
                         }
                     }
+                    if ($caselist->claim_amount > $max) {
+                        $array = [
+                            'adjusted' => $max,
+                            'claim_amount' => $caselist->claim_amount,
+                            'fee' => $caselist->claim_amount * 2 / 100
+                        ];
+                    }
                 }
                 if ($caselist->currency == 'USD') {
+                    $max = FeeBased::where('category_fee', 1)->max('adjusted_usd');
                     foreach ($feebased as $data) {
-                        if ($caselist->claim_amount <= $data->adjusted_idr) {
+                        if ($caselist->claim_amount <= $data->adjusted_usd) {
                             $array = [
                                 'adjusted' => $data->adjusted_usd,
                                 'claim_amount' => $caselist->claim_amount,
@@ -68,12 +77,21 @@ class AjaxController extends Controller
                             ];
                             break;
                         }
+                    }
+                    if ($caselist->claim_amount > $max) {
+                        $array = [
+                            'adjusted' => $max,
+                            'claim_amount' => $caselist->claim_amount,
+                            'fee' => $caselist->claim_amount * 2 / 100
+                        ];
                     }
                 }
             }
+            // 2
             if ($caselist->category == 2) {
                 $feebased = FeeBased::where('category_fee', 2)->get();
                 if ($caselist->currency == 'RP') {
+                    $max = FeeBased::where('category_fee', 2)->max('adjusted_idr');
                     foreach ($feebased as $data) {
                         if ($caselist->claim_amount <= $data->adjusted_idr) {
                             $array = [
@@ -84,14 +102,30 @@ class AjaxController extends Controller
                             break;
                         }
                     }
+                    if ($caselist->claim_amount > $max) {
+                        $array = [
+                            'adjusted' => $max,
+                            'claim_amount' => $caselist->claim_amount,
+                            'fee' => $caselist->claim_amount * 2 / 100
+                        ];
+                    }
                 }
                 if ($caselist->currency == 'USD') {
+                    $max = FeeBased::where('category_fee', 2)->max('adjusted_usd');
                     foreach ($feebased as $data) {
-                        if ($caselist->claim_amount <= $data->adjusted_idr) {
+                        if ($caselist->claim_amount <= $data->adjusted_usd) {
                             $array = [
                                 'adjusted' => $data->adjusted_usd,
                                 'claim_amount' => $caselist->claim_amount,
                                 'fee' => $data->fee_usd
+                            ];
+                            break;
+                        }
+                        if ($caselist->claim_amount > $max) {
+                            $array = [
+                                'adjusted' => $max,
+                                'claim_amount' => $caselist->claim_amount,
+                                'fee' => $caselist->claim_amount * 2 / 100
                             ];
                             break;
                         }
@@ -137,10 +171,10 @@ class AjaxController extends Controller
     }
     public function kurs(Request $request)
     {
-        $validator = validator()->make($request->all(),[
+        $validator = validator()->make($request->all(), [
             'kurs' => 'required|numeric'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json($validator->getMessageBag());
         }
         if (Currency::first() == null) {

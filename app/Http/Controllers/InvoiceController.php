@@ -40,6 +40,10 @@ class InvoiceController extends Controller
             'date_invoice' => 'required',
             'no_invoice.*' => 'required'
         ]);
+        if($request->no_invoice == null)
+        {
+            return back()->with('error', 'Member Invoice Does not Exists');
+        }
         if (CaseList::find($request->no_case)->hasInvoice()) {
             return back()->with('error', 'invoiced is already exists');
         }
@@ -73,11 +77,11 @@ class InvoiceController extends Controller
                 ]);
             }
             DB::commit();
+            return back()->with('success', 'Success create Invoice');
         } catch (Exception $err) {
             DB::rollBack();
             return back()->with('error', $err->getMessage());
         }
-        return back()->with('success', 'Success create Invoice');
     }
 
     public function show(Invoice $invoice)
