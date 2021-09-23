@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CaseList;
+use App\Models\Currency;
 use App\Models\Policy;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,7 +36,8 @@ class HomeController extends Controller
     public function profile()
     {
         $user = User::find(auth()->user()->id);
-        return view('dashboard.profile', compact('user'));
+        $kurs = Currency::first();
+        return view('dashboard.profile', compact('user','kurs'));
     }
 
     public function update(Request $request, User $user)
@@ -52,6 +54,16 @@ class HomeController extends Controller
         }
 
         $user->update($attr);
+        if(Currency::first() == null)
+        {
+            Currency::create([
+                'kurs' => $request->kurs
+            ]);
+        }else{
+            Currency::first()->update([
+                'kurs' => $request->kurs
+            ]);
+        }
 
         return back()->with('success', 'Your profile has been updated');
     }
