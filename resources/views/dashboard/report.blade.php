@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-5" style="font-size: 18px;">
                         <div>
-                            {{ __($title) }}
+                            {{ __($title . ' - (Pending)') }}
                         </div>
                         @can('case-list-create')
                         <a href="{{ route('case-list.create') }}" class="btn btn-admin"><i class="fas fa-pen"></i> Create</a>

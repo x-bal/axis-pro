@@ -24,11 +24,11 @@
                         {{ __('Case List') }}
                     </div>
                     @can('case-list-create')
-                    <a href="{{ route('case-list.create') }}" class="btn btn-admin"><i class="fas fa-pen"></i> Create</a>
+                    <a href="{{ route('case-list.create') }}" class="btn btn-primary"><i class="fas fa-pen"></i> Create</a>
                     @endif
                 </div>
                 <div class="table-responsive">
-
+                    @if(auth()->user()->hasRole('admin'))
                     <form action="{{ route('caselist.laporan') }}" method="post">
                         @csrf
                         <div class="row">
@@ -70,6 +70,7 @@
                             </div>
                         </div>
                     </form>
+                    @endif
 
                     <table class="table table-bordered table-striped custom-table" width="100%" id="table">
                         <thead style="font-weight: bold;">

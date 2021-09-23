@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-dark">
                     <span>Detail</span>
                     <a href="{{ route('report', 1) }}" class="float-right"><i class="fas fa-arrow-circle-right"></i></a>
                 </div>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-dark">
                     <span>Detail</span>
                     <a href="{{ route('report', 2) }}" class="float-right"><i class="fas fa-arrow-circle-right"></i></a>
                 </div>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-dark">
                     <span>Detail</span>
                     <a href="{{ route('report', 3) }}" class="float-right"><i class="fas fa-arrow-circle-right"></i></a>
                 </div>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-dark">
                     <span>Detail</span>
                     <a href="{{ route('report', 4) }}" class="float-right"><i class="fas fa-arrow-circle-right"></i></a>
                 </div>

@@ -32,6 +32,7 @@
                 </div>
 
                 <div class="table-responsive">
+                    @if(auth()->user()->hasRole('admin'))
                     <form action="{{ route('invoice.laporan') }}" method="post">
                         @csrf
                         <div class="row">
@@ -63,6 +64,8 @@
                             </div>
                         </div>
                     </form>
+                    @endif
+
                     <table class="table table-striped table-bordered" id="table">
                         <thead>
                             <tr>
@@ -96,7 +99,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-info btn-sm" data-toggle="modal" onclick="konfirmasi(this)" data-id="{{ $inv->id }}" data-target="#KonfirmasiModal">Konfirmasi</button>
+                                        <button class="btn btn-info btn-sm text-white" data-toggle="modal" onclick="konfirmasi(this)" data-id="{{ $inv->id }}" data-target="#KonfirmasiModal">Konfirmasi</button>
                                     </div>
                                 </td>
                             </tr>
@@ -274,12 +277,11 @@
 
 @section('footer')
 <script>
-    function konfirmasi(id)
-    {
+    function konfirmasi(id) {
         $('#id_invoice').val($(id).attr('data-id'))
     }
-    function store()
-    {
+
+    function store() {
         $.ajax({
             url: '/api/invoice/post',
             data: {
@@ -288,7 +290,7 @@
                 status: $('#status_invoice').val()
             },
             method: 'post',
-            success: function (data){
+            success: function(data) {
                 console.log(data)
                 location.reload()
             }
