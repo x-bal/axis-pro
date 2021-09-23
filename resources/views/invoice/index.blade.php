@@ -201,6 +201,7 @@
                                     <label for="adjusted">Adjusted</label>
                                     <input type="text" required id="adjusted" class="form-control" readonly>
                                     <span class="badge badge-success" id="ForAdjusted"></span>
+                                    <span class="badge badge-info" id="ForCategory"></span>
                                 </div>
                             </div>
                         </div>
@@ -385,6 +386,11 @@
         $('#expense_badge').html('')
         try {
             let data = await GetResource($(q).val())
+            if (data.caselist.category == 1) {
+                $('#ForCategory').html('Marine')
+            } else {
+                $('#ForCategory').html('Non Marine')
+            }
             $('#claim_amount').val(formatter(data.sum.claim_amount))
             $('#adjusted').val(formatter(data.sum.adjusted))
             $('#fee_based').val(formatter(data.sum.fee))
