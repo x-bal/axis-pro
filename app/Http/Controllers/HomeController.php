@@ -54,17 +54,7 @@ class HomeController extends Controller
         }
 
         $user->update($attr);
-        if(Currency::first() == null)
-        {
-            Currency::create([
-                'kurs' => $request->kurs
-            ]);
-        }else{
-            Currency::first()->update([
-                'kurs' => $request->kurs
-            ]);
-        }
-
+        
         return back()->with('success', 'Your profile has been updated');
     }
 

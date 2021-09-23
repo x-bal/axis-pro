@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bank;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +14,8 @@ class BankController extends Controller
         abort_unless(Gate::allows('bank-access'), 403);
 
         return view('bank.index', [
-            'banks' => Bank::get()
+            'banks' => Bank::get(),
+            'kurs' => Currency::first()
         ]);
     }
 
