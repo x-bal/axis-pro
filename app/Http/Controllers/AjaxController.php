@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Policy;
+use App\Models\User;
+use Carbon\Carbon;
 use Dotenv\Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -146,7 +148,7 @@ class AjaxController extends Controller
     public function ChartCaseList()
     {
 
-        $caselist = CaseList::with('policy')->get();
+        $caselist = CaseList::where('instruction_date', '>', Carbon::now()->subMonths(6))->with('policy')->get();
         $policy = Policy::get();
         $response = [
             'caselist' => $caselist,
@@ -187,5 +189,41 @@ class AjaxController extends Controller
             ]);
         }
         return response()->json($request->kurs);
+    }
+    public function ChartLineCaseList($id)
+    {
+        $user = User::find($id);
+        if ($user->hasRole('admin')) {
+            $bulan = [
+                CaseList::whereMonth('instruction_date', '01')->get()->count(),
+                CaseList::whereMonth('instruction_date', '02')->get()->count(),
+                CaseList::whereMonth('instruction_date', '03')->get()->count(),
+                CaseList::whereMonth('instruction_date', '04')->get()->count(),
+                CaseList::whereMonth('instruction_date', '05')->get()->count(),
+                CaseList::whereMonth('instruction_date', '06')->get()->count(),
+                CaseList::whereMonth('instruction_date', '07')->get()->count(),
+                CaseList::whereMonth('instruction_date', '08')->get()->count(),
+                CaseList::whereMonth('instruction_date', '09')->get()->count(),
+                CaseList::whereMonth('instruction_date', '10')->get()->count(),
+                CaseList::whereMonth('instruction_date', '11')->get()->count(),
+                CaseList::whereMonth('instruction_date', '12')->get()->count(),
+            ];
+        } else {
+            $bulan = [
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '01')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '02')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '03')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '04')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '05')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '06')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '07')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '08')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '09')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '10')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '11')->get()->count(),
+                CaseList::where('adjuster_id',$user->id)->whereMonth('instruction_date', '12')->get()->count(),
+            ];
+        }
+        return response()->json($bulan);
     }
 }

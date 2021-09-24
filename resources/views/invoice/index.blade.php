@@ -279,6 +279,18 @@
 @section('footer')
 <script>
     function konfirmasi(id) {
+        $(`#no_case`).select2({
+            placeholder: 'Select Product',
+            ajax: {
+                url: `/api/autocomplete`,
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
         $('#id_invoice').val($(id).attr('data-id'))
     }
 
