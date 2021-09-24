@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-center">
@@ -11,7 +11,21 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                     </div>
-                    <canvas id="myChart1" width="400" height="400"></canvas>
+                    <canvas id="myChart1" width="400" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-danger mt-5" id="spinner2" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <canvas id="myChart2" width="400" height="100"></canvas>
                 </div>
             </div>
         </div>
@@ -86,12 +100,14 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 @section('footer')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     var total = []
+    var bulan = []
     $(document).ready(function() {
         $.ajax({
             url: '/api/chart/caselist',
@@ -120,13 +136,36 @@
                                 backgroundColor: 'rgb(225, 116, 101)',
                                 borderColor: 'rgb(255, 255, 255)',
                                 data: total
-                            }]
+                            }],
+                            borderWidth: 10
                         }
                     })
                 }, 1000)
-                console.clear()
             }
         })
+        $.ajax({
+            url: '/api/chart/line/caselist/{{ auth()->user()->id }}',
+            success: function(resource) {
+                bulan = resource;
+            }
+        })
+        setTimeout(function() {
+            $('#spinner2').addClass('d-none')
+            let chart2 = $('#myChart2');
+            let myChart2 = new Chart(chart2, {
+                type: 'line',
+                data: {
+                    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                    datasets: [{
+                        label: 'Bulan',
+                        data: bulan,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+            })
+        }, 1000)
     })
 </script>
 @stop

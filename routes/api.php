@@ -25,6 +25,8 @@ Route::get('insurance/{id}', [AjaxController::class, 'insurance']);
 Route::get('autocomplete', [AjaxController::class, 'TheAutoCompleteFunc']);
 Route::get('invoice/export', [AjaxController::class, 'invoiceExport'])->name('invoice.export');
 Route::get('/chart/caselist', [AjaxController::class, 'ChartCaseList']);
+Route::get('/chart/line/caselist/{id}', [AjaxController::class, 'ChartLineCaseList']);
+
 Route::get('/count/{id}', [AjaxController::class, 'count']);
 Route::post('/invoice/post', [AjaxController::class, 'invoice']);
 Route::post('/update/kurs', [AjaxController::class, 'kurs']);
